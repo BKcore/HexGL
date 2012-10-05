@@ -13,7 +13,8 @@ If you feel like you deserve another license for a special case, [drop me a note
 
 ## Regarding the code
 
-As of now the code is pretty much undocumented. I'll be commenting it someday, but that won't be until I've finished the next content update and code refactoring sorry!
+As of now the code is pretty much raw and undocumented. I'll be commenting it someday, but that won't be until I've finished the next content update and code refactoring sorry!
+There will also be some refactoring, when I get some time :P
 
 ## Note
 
