@@ -1,7 +1,7 @@
 /*!
- * @class bkcore.Timer
+ * @class bkcore.Utils
  *
- * new Date().getTime() wrapper to use as timers.
+ * Various useful methods
  * 
  * @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
  */
