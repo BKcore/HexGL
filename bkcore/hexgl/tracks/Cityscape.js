@@ -14,6 +14,8 @@ bkcore.hexgl.tracks.Cityscape = {
 	lib: null,
 	materials: {},
 
+	name: "Cityscape",
+
 	checkpoints: {
 		list: [0,1,2],
 		start: 0,

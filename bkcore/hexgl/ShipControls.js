@@ -533,3 +533,13 @@ bkcore.hexgl.ShipControls.prototype.getShield = function(scale)
 		* (scale == undefined ? 1 : scale)
 	);
 };
+
+bkcore.hexgl.ShipControls.prototype.getPosition = function()
+{
+	return this.dummy.position;
+}
+
+bkcore.hexgl.ShipControls.prototype.getQuaternion = function()
+{
+	return this.dummy.quaternion;
+}

@@ -49,6 +49,8 @@ bkcore.hexgl.Gameplay = function(opts)
 	this.finishTime = null;
 	this.onFinish = opts.onFinish == undefined ? function(){console.log("FINISH");} : opts.onFinish;
 
+	this.raceData = null;
+
 	this.modes.timeattack = function()
 	{
 		self.hud.updateTime(self.timer.getElapsedTime());
@@ -107,6 +109,8 @@ bkcore.hexgl.Gameplay.prototype.start = function()
 	this.shipControls.active = false;
 
 	this.previousCheckPoint = this.track.checkpoints.start;
+
+	this.raceData = new bkcore.hexgl.RaceData(this.track.name, this.mode, this.shipControls);
 
 	this.active = true;
 	this.step = 0;
@@ -168,6 +172,7 @@ bkcore.hexgl.Gameplay.prototype.update = function()
 	else if(this.step == 4)
 	{
 		this.modes[this.mode].call(this);
+		this.raceData.tick(this.timer.time.elapsed);
 	}
 	else if(this.step == 100 && this.timer.time.elapsed >= 2000)
 	{
