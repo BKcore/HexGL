@@ -48,7 +48,7 @@ bkcore.hexgl.RaceData.prototype.applyInterpolated = function(time)
 	// no interpolation
 	if(this.seek == this.last && time >= prev.time
 		|| this.seek == 0)
-		this.apply(prev.position, prev.quaternion);
+		this.shipControls.teleport(prev.position, prev.quaternion);
 
 	// interpolation
 	var next = this.data[this.seek+1];
