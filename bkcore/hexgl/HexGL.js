@@ -189,6 +189,9 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 			{
 				dr != undefined && (dr.innerHTML = "New local record!");
 				localStorage['score-'+t+'-'+d] = f;
+
+				// Export race data
+				localStorage['race-'+t+'-'+d] = JSON.Stringify(this.gameplay.raceData.export());
 			}
 			else
 			{

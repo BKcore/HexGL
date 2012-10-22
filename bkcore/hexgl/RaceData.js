@@ -14,28 +14,34 @@ bkcore.hexgl.RaceData = function(track, mode, shipControls)
 	this.mode = mode;
 	this.shipControls = shipControls;
 
+	this.rate = 2; // 1 / rate
+	this.rateState = 1;
+
 	this.data = [];
-	this.last = 0;
+	this.last = -1;
 	this.seek = 0;
 
 	this._p = new THREE.Vector3();
 	this._q = new THREE.Quaternion();
 }
 
-bkcore.hexgl.RaceData.prototype.load = function(data)
-{
-	this.data = data;
-	this.last = data.length - 1;
-}
-
 bkcore.hexgl.RaceData.prototype.tick = function(time)
 {
-	this.data.push(new bkcore.hexgl.RaceTick(
-		time,
-		this.shipControls.getPosition(),
-		this.shipControls.getQuaternion()
-	));
-	++this.last;
+	if(this.rateState == 1)
+	{
+		this.data.push(new bkcore.hexgl.RaceTick(
+			time,
+			this.shipControls.getPosition(),
+			this.shipControls.getQuaternion()
+		));
+		++this.last;
+	}
+	else if(this.rateState == this.rate)
+	{
+		this.rateState = 0;
+	}
+	
+	this.rate++;
 }
 
 bkcore.hexgl.RaceData.prototype.applyInterpolated = function(time)
@@ -45,9 +51,14 @@ bkcore.hexgl.RaceData.prototype.applyInterpolated = function(time)
 
 	var prev = this.data[this.seek];
 
+	if(this.seek < 0)
+	{
+		console.warn('Bad race data.');
+		return;
+	}
+
 	// no interpolation
-	if(this.seek == this.last && time >= prev.time
-		|| this.seek == 0)
+	if(this.seek == this.last || this.seek == 0)
 		this.shipControls.teleport(prev.position, prev.quaternion);
 
 	// interpolation
@@ -62,6 +73,38 @@ bkcore.hexgl.RaceData.prototype.applyInterpolated = function(time)
 bkcore.hexgl.RaceData.prototype.reset = function()
 {
 	this.seek = 0;
+}
+
+bkcore.hexgl.RaceData.prototype.export = function()
+{
+	var exp = [];
+	for(var i = 0; i <= this.last; i++)	exp.push(
+			[this.data[i].time,
+			this.data[i].position.x,
+			this.data[i].position.y,
+			this.data[i].position.z,
+			this.data[i].quaternion.x,
+			this.data[i].quaternion.y,
+			this.data[i].quaternion.z,
+			this.data[i].quaternion.w]
+		);
+
+	return exp;
+}
+
+bkcore.hexgl.RaceData.prototype.import = function(imp)
+{
+	this.data = [];
+	for(var i = 0; i <= this.last; i++)
+	{
+		this.data.push(new bkcore.hexgl.RaceTick(
+			imp[i][0],
+			new THREE.Vector3(imp[i][1], imp[i][2], imp[i][3]),
+			new THREE.Quaternion(imp[i][4], imp[i][5], imp[i][6], imp[i][7])
+		));
+	}
+
+	return exp;
 }
 
 bkcore.hexgl.RaceTick = function(time, position, quaternion)

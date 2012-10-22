@@ -53,6 +53,8 @@ bkcore.hexgl.Gameplay = function(opts)
 
 	this.modes.timeattack = function()
 	{
+		self.raceData.tick(this.timer.time.elapsed);
+
 		self.hud.updateTime(self.timer.getElapsedTime());
 		var cp = self.checkPoint();
 
@@ -172,7 +174,6 @@ bkcore.hexgl.Gameplay.prototype.update = function()
 	else if(this.step == 4)
 	{
 		this.modes[this.mode].call(this);
-		this.raceData.tick(this.timer.time.elapsed);
 	}
 	else if(this.step == 100 && this.timer.time.elapsed >= 2000)
 	{
