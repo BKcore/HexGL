@@ -95,7 +95,7 @@ bkcore.hexgl.RaceData.prototype.export = function()
 bkcore.hexgl.RaceData.prototype.import = function(imp)
 {
 	this.data = [];
-	for(var i = 0; i <= this.last; i++)
+	for(var i = 0; i < imp.length; i++)
 	{
 		this.data.push(new bkcore.hexgl.RaceTick(
 			imp[i][0],
