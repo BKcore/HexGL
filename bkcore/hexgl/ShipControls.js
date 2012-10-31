@@ -337,6 +337,42 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 	}
 };
 
+bkcore.hexgl.ShipControls.prototype.teleport = function(pos, quat)
+{
+	this.quaternion.copy(quat);
+	this.dummy.quaternion.copy(this.quaternion);
+
+	this.dummy.position.copy(pos);
+	this.dummy.matrix.setPosition(this.dummy.position);
+	this.dummy.matrix.setRotationFromQuaternion(this.dummy.quaternion);
+
+	if(this.mesh != null)
+	{
+		this.mesh.matrix.identity();
+/*
+		// Gradient (Mesh only, no dummy physics impact)
+		var gradientDelta = (this.gradientTarget - this.gradient) * this.gradientLerp;
+		if(Math.abs(gradientDelta) > this.epsilon) this.gradient += gradientDelta;
+		if(Math.abs(this.gradient) > this.epsilon)
+		{
+			this.gradientAxis.set(1,0,0);
+			this.mesh.matrix.rotateByAxis(this.gradientAxis, this.gradient);
+		}
+
+		// Tilting (Idem)
+		var tiltDelta = (this.tiltTarget - this.tilt) * this.tiltLerp;
+		if(Math.abs(tiltDelta) > this.epsilon) this.tilt += tiltDelta;
+		if(Math.abs(this.tilt) > this.epsilon)
+		{
+			this.tiltAxis.set(0,0,1);
+			this.mesh.matrix.rotateByAxis(this.tiltAxis, this.tilt);
+		}
+ */
+		this.mesh.applyMatrix(this.dummy.matrix);
+		this.mesh.updateMatrixWorld(true);
+	}
+}
+
 bkcore.hexgl.ShipControls.prototype.boosterCheck = function(dt)
 {
 	if(!this.collisionMap || !this.collisionMap.loaded)

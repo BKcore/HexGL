@@ -37,6 +37,7 @@ bkcore.hexgl.Gameplay = function(opts)
 		FINISH: 1,
 		DESTROYED: 2,
 		WRONGWAY: 3,
+		REPLAY: 4,
 		NONE: -1
 	};
 	this.result = this.results.NONE;
@@ -88,7 +89,17 @@ bkcore.hexgl.Gameplay = function(opts)
 		{
 			self.end(self.results.DESTROYED);
 		}
-	}
+	};
+
+	this.modes.replay = function()
+	{
+		self.raceData.applyInterpolated(this.timer.time.elapsed);
+
+		if(self.raceData.seek == self.raceData.last)
+		{
+			self.end(self.result.REPLAY);
+		}
+	};
 }
 
 bkcore.hexgl.Gameplay.prototype.simu = function()
@@ -101,7 +112,7 @@ bkcore.hexgl.Gameplay.prototype.simu = function()
 	this.shipControls.active = false;
 }
 
-bkcore.hexgl.Gameplay.prototype.start = function()
+bkcore.hexgl.Gameplay.prototype.start = function(opts)
 {
 	this.finishTime = null;
 	this.score = null;
@@ -113,6 +124,21 @@ bkcore.hexgl.Gameplay.prototype.start = function()
 	this.previousCheckPoint = this.track.checkpoints.start;
 
 	this.raceData = new bkcore.hexgl.RaceData(this.track.name, this.mode, this.shipControls);
+	if(this.mode == 'replay')
+	{
+		try {
+			var d = localStorage['race-'+this.track.name+'-replay'];
+			if(d == undefined)
+			{
+				console.error('No replay data for '+'race-'+this.track.name+'-replay'+'.');
+				return false;
+			}
+			this.raceData.import(
+				JSON.parse(d)
+			);
+		}
+		catch(e) { console.error('Bad replay format : '+e); return false; }
+	}
 
 	this.active = true;
 	this.step = 0;
