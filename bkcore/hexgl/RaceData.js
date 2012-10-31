@@ -52,7 +52,7 @@ bkcore.hexgl.RaceData.prototype.tick = function(time)
 
 bkcore.hexgl.RaceData.prototype.applyInterpolated = function(time)
 {
-	while(this.seek < this.last && this.data[this.seek+1].time < time)
+	while(this.seek < this.last && this.data[this.seek+1][0] < time)
 		++this.seek;
 
 	var prev = this.data[this.seek];
@@ -67,7 +67,7 @@ bkcore.hexgl.RaceData.prototype.applyInterpolated = function(time)
 
 	// no interpolation
 	if(this.seek == this.last || this.seek == 0)
-		this.shipControls.teleport(prev.position, prev.quaternion);
+		this.shipControls.teleport(this._pp, this._pq);
 
 	// interpolation
 	var next = this.data[this.seek+1];
@@ -94,4 +94,6 @@ bkcore.hexgl.RaceData.prototype.export = function()
 bkcore.hexgl.RaceData.prototype.import = function(imp)
 {
 	this.data = imp;
+	this.last = this.data.length-1;
+	console.log(this.data);
 }

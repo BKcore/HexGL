@@ -344,6 +344,9 @@ bkcore.hexgl.ShipControls.prototype.teleport = function(pos, quat)
 
 	this.dummy.position.copy(pos);
 	this.dummy.matrix.setPosition(this.dummy.position);
+
+	//console.log(pos.x, pos.y, pos.z);
+
 	this.dummy.matrix.setRotationFromQuaternion(this.dummy.quaternion);
 
 	if(this.mesh != null)

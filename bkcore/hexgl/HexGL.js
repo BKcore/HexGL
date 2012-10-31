@@ -142,6 +142,7 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 		mode: this.mode,
 		hud: this.hud,
 		shipControls: this.components.shipControls,
+		cameraControls: this.components.cameraChase,
 		analyser: this.track.analyser,
 		pixelRatio: this.track.pixelRatio,
 		track: this.track,

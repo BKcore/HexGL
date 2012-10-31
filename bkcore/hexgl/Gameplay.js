@@ -27,6 +27,7 @@ bkcore.hexgl.Gameplay = function(opts)
 
 	this.hud = opts.hud;
 	this.shipControls = opts.shipControls;
+	this.cameraControls = opts.cameraControls;
 	this.track = opts.track;
 	this.analyser = opts.analyser;
 	this.pixelRatio = opts.pixelRatio;
@@ -126,6 +127,9 @@ bkcore.hexgl.Gameplay.prototype.start = function(opts)
 	this.raceData = new bkcore.hexgl.RaceData(this.track.name, this.mode, this.shipControls);
 	if(this.mode == 'replay')
 	{
+		this.cameraControls.mode = this.cameraControls.modes.ORBIT;
+		this.hud.messageOnly = true;
+
 		try {
 			var d = localStorage['race-'+this.track.name+'-replay'];
 			if(d == undefined)
@@ -195,7 +199,9 @@ bkcore.hexgl.Gameplay.prototype.update = function()
 		this.hud.display("Go", 0.5);
 		this.step = 4;
 		this.timer.start();
-		this.shipControls.active = true;
+		
+		if(this.mode != "replay")
+			this.shipControls.active = true;
 	}
 	else if(this.step == 4)
 	{
