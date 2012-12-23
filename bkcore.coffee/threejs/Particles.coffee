@@ -187,3 +187,13 @@ class Particle
     @basecolor.setRGB(0,0,0)
     @life = 0.0
     @available = true
+
+###
+  Exports
+  @package bkcore.threejs
+###
+exports = exports ? @
+exports.bkcore ||= {}
+exports.bkcore.threejs ||= {}
+exports.bkcore.threejs.Particle = Particle
+exports.bkcore.threejs.Particles = Particles

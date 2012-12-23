@@ -9,7 +9,7 @@
 
 
 (function() {
-  var Particle, Particles;
+  var Particle, Particles, exports, _base;
 
   Particles = (function() {
     /*
@@ -190,5 +190,21 @@
     return Particle;
 
   })();
+
+  /*
+    Exports
+    @package bkcore.threejs
+  */
+
+
+  exports = exports != null ? exports : this;
+
+  exports.bkcore || (exports.bkcore = {});
+
+  (_base = exports.bkcore).threejs || (_base.threejs = {});
+
+  exports.bkcore.threejs.Particle = Particle;
+
+  exports.bkcore.threejs.Particles = Particles;
 
 }).call(this);
