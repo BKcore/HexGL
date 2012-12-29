@@ -198,6 +198,8 @@ bkcore.hexgl.ShipControls.prototype.destroy = function()
 	this.collision.front = false;
 	this.collision.left = false;
 	this.collision.right = false;
+	bkcore.Audio.play('destroyed');
+	bkcore.Audio.stop('bg');
 }
 
 bkcore.hexgl.ShipControls.prototype.update = function(dt)
@@ -353,7 +355,10 @@ bkcore.hexgl.ShipControls.prototype.boosterCheck = function(dt)
 	var color = this.collisionMap.getPixel(x, z);
 
 	if(color.r == 255 && color.g < 127 && color.b < 127)
+	{
+		bkcore.Audio.play('boost');
 		this.boost = this.boosterSpeed;
+	}
 
 	this.movement.z += this.boost * dt;
 }
@@ -380,6 +385,7 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 
 	if(collision.r < 255)
 	{
+		bkcore.Audio.play('crash');
 		// Shield
 		var sr = (this.getRealSpeed() / this.maxSpeed);
 		this.shield -= sr * sr * 0.8 * this.shieldDamage;

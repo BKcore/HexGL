@@ -97,6 +97,7 @@ bkcore.hexgl.HexGL.prototype.start = function()
 bkcore.hexgl.HexGL.prototype.reset = function()
 {
 	this.manager.get('game').objects.lowFPS = 0;
+	bkcore.Audio.play('bg');
 	this.gameplay.start();
 }
 
@@ -130,6 +131,12 @@ bkcore.hexgl.HexGL.prototype.init = function()
 bkcore.hexgl.HexGL.prototype.load = function(opts)
 {
 	this.track.load(opts, this.quality);
+	
+	for(var i in bkcore.AudioList){
+		bkcore.Audio.addSound(bkcore.AudioList[i].src,i,bkcore.AudioList[i].loop,function(){
+			console.log('Audio '+i+' LOADED.');
+		});
+	}
 }
 
 bkcore.hexgl.HexGL.prototype.initGameplay = function()
@@ -151,6 +158,8 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 			self.displayScore(this.finishTime, this.lapTimes);
 		}
 	});
+	
+	bkcore.Audio.play('bg');
 
 	this.gameplay.start();
 }
