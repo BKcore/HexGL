@@ -38,12 +38,22 @@
 			}
 			#progress #current {
 				position: relative;
+				height:100%;
 				left:0%;
 				top:0%;
-				background:rgb(0,0,105);
+				background:rgb(215,235,255);
 				border-radius:5px;
 				-webkit-border-radius:5px;
 				-moz-border-radius:5px;
+			}
+			#progress #text {
+				width: 20%;
+				height: 100%;
+				position: relative;
+				color: white;
+				font-size: 100%;
+				top: 0%;
+				left: 40%;
 			}
 		</style>
 	</head>
@@ -53,6 +63,7 @@
 		<div id="main"></div>
 		<div id="progress">
 			<div id="current"></div>
+			<div id="text"></div>
 		</div>
 
 		<script src="js/Three.dev.js"></script>
@@ -101,6 +112,7 @@
 				container = document.getElementById("main");
 				var progress = document.getElementById("progress");
 				var current = document.getElementById("current");
+				var text = document.getElementById("text");
 
 				hexGL = new bkcore.hexgl.HexGL({
 					document: document,
@@ -128,6 +140,7 @@
 					{
 						console.log("LOADED "+t+" : "+n+" ( "+p.loaded+" / "+p.total+" ).");
 						current.style.width = (p.loaded/p.total)*100 + '%';
+						text.textContent = Math.round((p.loaded/p.total)*100) + '%';
 					}
 				});
 			}
