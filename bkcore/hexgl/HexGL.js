@@ -98,6 +98,10 @@ bkcore.hexgl.HexGL.prototype.reset = function()
 {
 	this.manager.get('game').objects.lowFPS = 0;
 	bkcore.Audio.play('bg');
+	
+	bkcore.Audio.volume('wind',0.05);
+	bkcore.Audio.play('wind');
+	
 	this.gameplay.start();
 }
 
@@ -133,9 +137,11 @@ bkcore.hexgl.HexGL.prototype.load = function(opts)
 	this.track.load(opts, this.quality);
 	
 	for(var i in bkcore.AudioList){
-		bkcore.Audio.addSound(bkcore.AudioList[i].src,i,bkcore.AudioList[i].loop,function(){
-			console.log('Audio '+i+' LOADED.');
-		});
+		bkcore.Audio.addSound(bkcore.AudioList[i].src,i,bkcore.AudioList[i].loop,(function(i){
+			return function(){
+				console.log('Audio '+i+' LOADED.');
+			};
+		})(i));
 	}
 }
 
@@ -160,6 +166,9 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 	});
 	
 	bkcore.Audio.play('bg');
+	
+	//bkcore.Audio.volume('wind',0.0005);
+	//bkcore.Audio.play('wind');
 
 	this.gameplay.start();
 }

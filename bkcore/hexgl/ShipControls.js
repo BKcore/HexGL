@@ -200,6 +200,7 @@ bkcore.hexgl.ShipControls.prototype.destroy = function()
 	this.collision.right = false;
 	bkcore.Audio.play('destroyed');
 	bkcore.Audio.stop('bg');
+	bkcore.Audio.stop('wind');
 }
 
 bkcore.hexgl.ShipControls.prototype.update = function(dt)

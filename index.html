@@ -25,12 +25,35 @@
 				left: 0;
 				width: 100%;
 			}
+			#progress {
+				position: fixed;
+				top:40%;
+				left:25%;
+				width:50%;
+				height:10%;
+				background:#eee;
+				border-radius:5px;
+				-webkit-border-radius:5px;
+				-moz-border-radius:5px;
+			}
+			#progress #current {
+				position: relative;
+				left:0%;
+				top:0%;
+				background:rgb(0,0,105);
+				border-radius:5px;
+				-webkit-border-radius:5px;
+				-moz-border-radius:5px;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div id="overlay"></div>
 		<div id="main"></div>
+		<div id="progress">
+			<div id="current"></div>
+		</div>
 
 		<script src="js/Three.dev.js"></script>
 		<script src="js/ShaderExtras.js"></script>
@@ -76,6 +99,8 @@
 			function init() {
 				hudcontainer = document.getElementById("overlay");
 				container = document.getElementById("main");
+				var progress = document.getElementById("progress");
+				var current = document.getElementById("current");
 
 				hexGL = new bkcore.hexgl.HexGL({
 					document: document,
@@ -92,6 +117,7 @@
 				hexGL.load({
 					onLoad: function(){
 						console.log("ALL LOADED.");
+						progress.style.display = 'none';
 						hexGL.init();
 						hexGL.start();
 					},
@@ -101,6 +127,7 @@
 					onProgress: function(p, t, n)
 					{
 						console.log("LOADED "+t+" : "+n+" ( "+p.loaded+" / "+p.total+" ).");
+						current.style.width = (p.loaded/p.total)*100 + '%';
 					}
 				});
 			}

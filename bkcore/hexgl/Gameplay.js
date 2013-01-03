@@ -77,7 +77,7 @@ bkcore.hexgl.Gameplay = function(opts)
 		else if(cp != -1 && cp != self.previousCheckPoint)
 		{
 			self.previousCheckPoint = cp;
-			//self.hud.display("Checkpoint", 0.5);
+			self.hud.display("Checkpoint", 0.5);      
 		}
 
 		if(self.shipControls.destroyed == true)
@@ -132,7 +132,8 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 	}
 	else if(result == this.results.DESTROYED)
 	{
-		this.hud.display("Destroyed");
+		this.hud.display("Destroyed",1);
+		this.hud.display("Perss Esc to restart");
 		this.step = 100;
 	}
 }
