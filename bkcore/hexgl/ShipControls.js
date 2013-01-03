@@ -156,6 +156,26 @@ bkcore.hexgl.ShipControls = function(domElement)
 
 	domElement.addEventListener('keydown', onKeyDown, false);
 	domElement.addEventListener('keyup', onKeyUp, false);
+	
+	if(window.DeviceOrientationEvent){
+		//we're on a mobile device or a tablet PC
+		window.addEventListener('deviceorientation', function(e){
+			var accel = e.gamma;
+			var leftright = e.beta;
+			
+			if(accel > 5) self.key.forward = true;
+			else self.key.forward = false;
+			
+			if(accel < -5) self.key.backward = true;
+			else self.key.backward = false;
+			
+			if(leftright > 5) self.key.left = true;
+			else self.key.left = false;
+			
+			if(leftright < -5) self.key.right = true;
+			else self.key.right = false;
+		},false);
+	}
 };
 
 bkcore.hexgl.ShipControls.prototype.control = function(threeMesh)
