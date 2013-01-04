@@ -360,6 +360,10 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 		this.mesh.applyMatrix(this.dummy.matrix);
 		this.mesh.updateMatrixWorld(true);
 	}
+	
+	//Update listener position
+	bkcore.Audio.setListenerPos(this.movement);
+	bkcore.Audio.setListenerVelocity(this.currentVelocity);
 };
 
 bkcore.hexgl.ShipControls.prototype.boosterCheck = function(dt)
