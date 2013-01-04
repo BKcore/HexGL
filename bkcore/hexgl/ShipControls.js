@@ -97,6 +97,8 @@ bkcore.hexgl.ShipControls = function(domElement)
 
 	this.resetPos = null;
 	this.resetRot = null;
+	
+	this.meterMoveThreshold = 13;
 
 	this.key = {
 		forward: false,
@@ -161,18 +163,18 @@ bkcore.hexgl.ShipControls = function(domElement)
 		//we're on a mobile device or a tablet PC
 		window.addEventListener('deviceorientation', function(e){
 			var accel = e.gamma;
-			var leftright = e.beta;
+			var leftright = e.alpha;
 			
-			if(accel > 5) self.key.forward = true;
+			if(accel > this.meterMoveThreshold) self.key.forward = true;
 			else self.key.forward = false;
 			
-			if(accel < -5) self.key.backward = true;
+			if(accel >= 360-this.meterMoveThreshold && accel <= 360) self.key.backward = true;
 			else self.key.backward = false;
 			
-			if(leftright > 5) self.key.left = true;
+			if(leftright > this.meterMoveThreshold) self.key.left = true;
 			else self.key.left = false;
 			
-			if(leftright < -5) self.key.right = true;
+			if(leftright >= 360-this.meterMoveThreshold && leftright <= 360) self.key.right = true;
 			else self.key.right = false;
 		},false);
 	}
