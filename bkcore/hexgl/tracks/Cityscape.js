@@ -350,7 +350,7 @@ bkcore.hexgl.tracks.Cityscape = {
 			ship.add(boosterLight);
 
 		// SHIP CONTROLS
-		var shipControls = new bkcore.hexgl.ShipControls(ctx.document);
+		var shipControls = new bkcore.hexgl.ShipControls(ctx);
 		shipControls.collisionMap = this.lib.get("analysers", "track.cityscape.collision");
 		shipControls.collisionPixelRatio = 2048.0 / 6000.0;
 		shipControls.collisionDetection = true;
@@ -423,7 +423,7 @@ bkcore.hexgl.tracks.Cityscape = {
 			this.objects.components.cameraChase.cameraCube.rotation.copy(c.rotation);*/
 
 			this.objects.composers.game.render(dt);
-			this.objects.hud.update(
+			if(this.objects.hud) this.objects.hud.update(
 				this.objects.components.shipControls.getRealSpeed(100), 
 				this.objects.components.shipControls.getRealSpeedRatio(), 
 				this.objects.components.shipControls.getShield(100), 

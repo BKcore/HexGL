@@ -13,6 +13,11 @@
   var TouchController, Vec2, exports;
 
   TouchController = (function() {
+
+    TouchController.isTouchable = function() {
+      return 'ontouchstart' in document.documentElement;
+    };
+
     /*
         Creates a new TouchController
     
@@ -21,11 +26,12 @@
         @param buttonCallback function Callback for non-stick touches
     */
 
+
     function TouchController(dom, stickMargin, buttonCallback) {
       var _this = this;
       this.dom = dom;
-      this.stickMargin = stickMargin;
-      this.buttonCallback = buttonCallback;
+      this.stickMargin = stickMargin != null ? stickMargin : 200;
+      this.buttonCallback = buttonCallback != null ? buttonCallback : null;
       this.active = true;
       this.touches = null;
       this.stickID = -1;
@@ -60,7 +66,7 @@
           continue;
         } else {
           if (typeof this.buttonCallback === "function") {
-            this.buttonCallback(touch, event);
+            this.buttonCallback(true, touch, event);
           }
         }
       }
@@ -102,6 +108,10 @@
           this.stickID = -1;
           this.stickVector.set(0, 0);
           break;
+        } else {
+          if (typeof this.buttonCallback === "function") {
+            this.buttonCallback(false, touch, event);
+          }
         }
       }
       return false;

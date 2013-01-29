@@ -8,9 +8,10 @@
 var bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
-bkcore.hexgl.ShipControls = function(domElement)
+bkcore.hexgl.ShipControls = function(ctx)
 {
 	var self = this;
+	var domElement = ctx.document;
 
 	this.active = true;
 	this.destroyed = false;
@@ -114,6 +115,17 @@ bkcore.hexgl.ShipControls = function(domElement)
 		right: false
 	};
 
+	this.touchController = bkcore.TouchController.isTouchable() ? new bkcore.TouchController(
+		domElement, ctx.width/2, 
+		function(state, touch, event){
+			if(event.touches.length <= 1)
+				self.key.forward = false;
+			else
+				self.key.forward = true;
+			console.log(event.touches.length);
+			console.log(self.key.forward);
+		}) : null;
+
 	function onKeyDown(event) 
 	{
 		switch(event.keyCode) 
@@ -136,7 +148,7 @@ bkcore.hexgl.ShipControls = function(domElement)
 
 	function onKeyUp(event) 
 	{
-		switch(event.keyCode) 
+		switch(event.keyCode)
 		{
 			case 38: /*up*/	self.key.forward = false; break;
 
@@ -211,6 +223,12 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 
 	var rollAmount = 0.0;
 	var angularAmount = 0.0;
+
+	if(this.touchController != null)
+	{
+		angularAmount -= this.touchController.stickVector.x/100 * this.angularSpeed * dt;
+		rollAmount += this.touchController.stickVector.x/100 * this.rollAngle;
+	}
 
 	if(this.key.forward)
 		this.speed += this.thrust * dt;

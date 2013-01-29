@@ -20,7 +20,7 @@ bkcore.hexgl.HexGL = function(opts)
 	this.a = window.location.href;
 
 	this.active = true;
-
+	this.displayHUD = opts.hud == undefined ? true : opts.hud;
 	this.width = opts.width == undefined ? window.innerWidth : opts.width;
 	this.height = opts.height == undefined ? window.innerHeight : opts.height;
 
@@ -265,12 +265,14 @@ bkcore.hexgl.HexGL.prototype.initRenderer = function()
 	renderer.domElement.style.position = "relative";
 
 	this.containers.main.appendChild( renderer.domElement );	
+	this.canvas = renderer.domElement;
 	this.renderer = renderer;
 	this.manager = new bkcore.threejs.RenderManager(renderer);
 }
 
 bkcore.hexgl.HexGL.prototype.initHUD = function()
 {
+	if(!this.displayHUD) return;
 	this.hud = new bkcore.hexgl.HUD({
 		width: this.width,
 		height: this.height,

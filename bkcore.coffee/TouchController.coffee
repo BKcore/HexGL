@@ -7,6 +7,9 @@
 ###
 class TouchController
 
+  @isTouchable: ->
+    return ('ontouchstart' of document.documentElement);
+
   ###
     Creates a new TouchController
 
@@ -14,7 +17,7 @@ class TouchController
     @param stickMargin int The left margin in px for stick detection
     @param buttonCallback function Callback for non-stick touches
   ###
-  constructor: (@dom, @stickMargin, @buttonCallback) ->
+  constructor: (@dom, @stickMargin=200, @buttonCallback=null) ->
     @active = true
     @touches = null
     @stickID = -1
@@ -39,7 +42,7 @@ class TouchController
         @stickVector.set(0, 0)
         continue
       else
-        @buttonCallback?(touch, event)
+        @buttonCallback?(on, touch, event)
     @touches = event.touches
     false
 
@@ -68,6 +71,8 @@ class TouchController
         @stickID = -1
         @stickVector.set(0, 0)
         break
+      else
+        @buttonCallback?(off, touch, event)
     false
 
 ###
