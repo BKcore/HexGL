@@ -56,7 +56,8 @@ bkcore.Audio.volume = function(id,volume){
 bkcore.Audio.setListenerPos = function(vec){
 	var panner = bkcore.Audio._panner;
 	var vec2 = vec.normalize();
-	panner.setPosition(vec2.x*bkcore.Audio.posMultipler,vec2.y*bkcore.Audio.posMultipler,vec2.z*bkcore.Audio.posMultipler);
+	vec2.multiplyScalar(bkcore.Audio.posMultipler);
+	panner.setPosition(vec2.x,vec2.y,vec2.z);
 };
 
 bkcore.Audio.setListenerVelocity = function(vec){
