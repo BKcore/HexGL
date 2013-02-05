@@ -1,3 +1,11 @@
+ /*
+ * HexGL
+ * @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
+ * @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License. 
+ *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
+ * 
+ * This part is created by Licson Lee <licson0729@gmail.com>, for audio support of HexGL.
+ */
 var bkcore = bkcore || {};
 
 bkcore.AudioList = {
@@ -15,7 +23,8 @@ bkcore.Audio.init = function(){
 	bkcore.Audio._ctx = new (window.AudioContext||window.webkitAudioContext);
 	bkcore.Audio._panner = bkcore.Audio._ctx.createPanner();
 	bkcore.Audio._panner.connect(bkcore.Audio._ctx.destination);
-	bkcore.Audio.posMultipler = 1.5;
+	bkcore.Audio._gains = {};
+	bkcore.Audio.posMultipler = 2.098564;
 };
 
 bkcore.Audio.init();
@@ -30,7 +39,10 @@ bkcore.Audio.addSound = function(src,id,loop,callback){
 	
 	if(ctx){
 		var mediasrc = ctx.createMediaElementSource(audio);
-		mediasrc.connect(bkcore.Audio._panner);
+		var gain = ctx.createGainNode();
+		mediasrc.connect(gain);
+		gain.connect(bkcore.Audio._panner);
+		bkcore.Audio._gains[id] = gain;
 	}
 	
 	bkcore.Audio.sounds[id] = audio;
@@ -50,7 +62,8 @@ bkcore.Audio.stop = function(id){
 };
 
 bkcore.Audio.volume = function(id,volume){
-	bkcore.Audio.sounds[id].volume = volume;
+	bkcore.Audio.sounds[id].volume = Math.min(1,volume);
+	if(bkcore.Audio._ctx) bkcore.Audio._gains[id].gain.value = volume;
 };
 
 bkcore.Audio.setListenerPos = function(vec){

@@ -99,10 +99,10 @@ bkcore.hexgl.HexGL.prototype.reset = function()
 	this.manager.get('game').objects.lowFPS = 0;
 	bkcore.Audio.play('bg');
 	
-	bkcore.Audio.volume('wind',0.005);
-	//bkcore.Audio.play('wind');
+	bkcore.Audio.volume('wind',0.05);
+	bkcore.Audio.play('wind');
 	
-	bkcore.Audio.setListenerPos(new THREE.Vector3(0,0,0));
+	//bkcore.Audio.setListenerPos(new THREE.Vector3(0,0,0));
 	
 	this.gameplay.start();
 }
@@ -168,10 +168,9 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 	});
 	
 	bkcore.Audio.play('bg');
-	
-	//bkcore.Audio.play('wind');
-	//bkcore.Audio.volume('wind',0.005);
-	bkcore.Audio.setListenerPos(new THREE.Vector3(0,0,0));
+	bkcore.Audio.play('wind');
+	bkcore.Audio.volume('wind',0.05);
+	//bkcore.Audio.setListenerPos(new THREE.Vector3(0,0,0));
 
 	this.gameplay.start();
 }
