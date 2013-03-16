@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" manifest="cache.appcache">
+	<head>
+		<title>HexGL dev page</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="css/fonts.css" type="text/css" charset="utf-8">
+		<style>
+			body {
+				background:#ccc;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+				font-family:georgia;
+				text-align:center;
+				color: #666;
+			}
+			h1 {color: #666	; }
+			a { color:skyblue }
+			canvas { pointer-events:none; }
+			#overlay{
+				position: absolute;
+				z-index: 9999;
+				top: 0;
+				left: 0;
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="overlay"></div>
+		<div id="main"></div>
+
+		<script src="libs/Three.dev.js"></script>
+		<script src="libs/ShaderExtras.js"></script>
+		<script src="libs/postprocessing/EffectComposer.js"></script>
+		<script src="libs/postprocessing/RenderPass.js"></script>
+		<script src="libs/postprocessing/BloomPass.js"></script>
+		<script src="libs/postprocessing/ShaderPass.js"></script>
+		<script src="libs/postprocessing/MaskPass.js"></script>
+		<script src="libs/Detector.js"></script>
+		<script src="libs/Stats.js"></script>
+		<script src="libs/DAT.GUI.min.js"></script>
+
+		
+		<script src="bkcore.coffee/controllers/TouchController.js"></script>
+		<script src="bkcore.coffee/controllers/OrientationController.js"></script>
+
+		<script src="bkcore/Timer.js"></script>
+		<script src="bkcore/ImageData.js"></script>
+		<script src="bkcore/Utils.js"></script>
+
+		<script src="bkcore/threejs/RenderManager.js"></script>
+		<script src="bkcore/threejs/Shaders.js"></script>
+		<script src="bkcore/threejs/Particles.js"></script>
+		<script src="bkcore/threejs/Loader.js"></script>
+
+		<script src="bkcore/hexgl/HUD.js"></script>
+		<script src="bkcore/hexgl/RaceData.js"></script>
+		<script src="bkcore/hexgl/ShipControls.js"></script>
+		<script src="bkcore/hexgl/ShipEffects.js"></script>
+		<script src="bkcore/hexgl/CameraChase.js"></script>
+		<script src="bkcore/hexgl/Gameplay.js"></script>
+
+		<script src="bkcore/hexgl/tracks/Cityscape.js"></script>
+
+		<script src="bkcore/hexgl/HexGL.js"></script>
+
+		<script>
+
+			var SCREEN_WIDTH = window.innerWidth;
+			var SCREEN_HEIGHT = window.innerHeight;
+
+			var container, hudcontainer;
+
+			var hexGL;
+
+			function init() {
+				hudcontainer = document.getElementById("overlay");
+				container = document.getElementById("main");
+
+				hexGL = new bkcore.hexgl.HexGL({
+					document: document,
+					width: SCREEN_WIDTH,
+					height: SCREEN_HEIGHT,
+					container: container,
+					overlay: overlay,
+					quality: bkcore.Utils.getURLParameter('quality'),
+					difficulty: bkcore.Utils.getURLParameter('difficulty'),
+					half: bkcore.Utils.getURLParameter('half'),
+					mode: bkcore.Utils.getURLParameter('mode'),
+					track: 'Cityscape'
+				});
+
+				hexGL.load({
+					onLoad: function(){
+						console.log("ALL LOADED.");
+						hexGL.init();
+						hexGL.start();
+					},
+					onError: function(s){
+						console.log("ERROR ON "+s+".");
+					},
+					onProgress: function(p, t, n)
+					{
+						console.log("LOADED "+t+" : "+n+" ( "+p.loaded+" / "+p.total+" ).");
+					}
+				});
+			}
+			
+			init();
+
+		</script>
+
+	</body>
+</html>

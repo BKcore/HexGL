@@ -37,11 +37,11 @@ bkcore.hexgl.tracks.Cityscape = {
 	analyser: null,
 	pixelRatio: 2048.0 / 6000.0,
 
-	load: function(opts, quality)
+	load: function(opts, quality, mobile)
 	{
 		this.lib = new bkcore.threejs.Loader(opts);
 
-		if(quality < 1) // LOW
+		if((quality < 1 && !mobile) || quality < 2) // LOW
 		{
 			this.lib.load({
 				textures: {
@@ -137,9 +137,9 @@ bkcore.hexgl.tracks.Cityscape = {
 		}
 	},
 
-	buildMaterials: function(quality)
+	buildMaterials: function(quality, mobile)
 	{
-		if(this.quality < 1) // LOW
+		if((quality < 1 && !mobile) || quality < 2) // LOW
 		{
 			this.materials.track = new THREE.MeshBasicMaterial({
 				map: this.lib.get("textures", "track.cityscape.diffuse"),
@@ -268,7 +268,7 @@ bkcore.hexgl.tracks.Cityscape = {
 		}
 	},
 
-	buildScenes: function(ctx, quality)
+	buildScenes: function(ctx, quality, mobile)
 	{
 		// IMPORTANT
 		this.analyser = this.lib.get("analysers", "track.cityscape.collision");
@@ -311,7 +311,7 @@ bkcore.hexgl.tracks.Cityscape = {
 		sun.position.set( -4000, 1200, 1800 );
 		sun.lookAt(new THREE.Vector3());
 
-		if(quality > 0)
+		if(quality > 0 && !mobile)
 		{
 			sun.castShadow = true;
 			sun.shadowCameraNear = 50;
@@ -371,7 +371,7 @@ bkcore.hexgl.tracks.Cityscape = {
 			boosterLight: boosterLight,
 			useParticles: false
 		};
-		if(quality > 0)
+		if(quality > 0 && !mobile)
 		{
 			fxParams.textureCloud = this.lib.get("textures", "cloud");
 			fxParams.textureSpark = this.lib.get("textures", "spark");

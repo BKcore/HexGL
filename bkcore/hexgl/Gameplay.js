@@ -12,8 +12,8 @@ bkcore.hexgl.Gameplay = function(opts)
 {
 	var self = this;
 
-	this.startDelay = 1000;
-	this.countDownDelay = 1500;
+	this.startDelay = opts.hud == null ? 0 : 1000;
+	this.countDownDelay = opts.hud == null ? 1000 : 1500;
 
 	this.active = false;
 	this.timer = new bkcore.Timer();
@@ -107,7 +107,7 @@ bkcore.hexgl.Gameplay.prototype.simu = function()
 {
 	this.lapTimes = [92300, 91250, 90365];
 	this.finishTime = this.lapTimes[0]+this.lapTimes[1]+this.lapTimes[2];
-	this.hud != null && this.hud.display("Finish");
+	if(this.hud != null) this.hud.display("Finish");
 	this.step = 100;
 	this.result = this.results.FINISH;
 	this.shipControls.active = false;
@@ -128,7 +128,7 @@ bkcore.hexgl.Gameplay.prototype.start = function(opts)
 	if(this.mode == 'replay')
 	{
 		this.cameraControls.mode = this.cameraControls.modes.ORBIT;
-		this.hud != null && this.hud.messageOnly = true;
+		if(this.hud != null) this.hud.messageOnly = true;
 
 		try {
 			var d = localStorage['race-'+this.track.name+'-replay'];
@@ -166,12 +166,12 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 
 	if(result == this.results.FINISH)
 	{
-		this.hud != null && this.hud.display("Finish");
+		if(this.hud != null) this.hud.display("Finish");
 		this.step = 100;
 	}
 	else if(result == this.results.DESTROYED)
 	{
-		this.hud != null && this.hud.display("Destroyed");
+		if(this.hud != null) this.hud.display("Destroyed");
 		this.step = 100;
 	}
 }
@@ -184,22 +184,22 @@ bkcore.hexgl.Gameplay.prototype.update = function()
 	
 	if(this.step == 0 && this.timer.time.elapsed >= this.countDownDelay+this.startDelay)
 	{
-		this.hud != null && this.hud.display("3");
+		if(this.hud != null) this.hud.display("3");
 		this.step = 1;
 	}
 	else if(this.step == 1 && this.timer.time.elapsed >= 2*this.countDownDelay+this.startDelay)
 	{
-		this.hud != null && this.hud.display("2");
+		if(this.hud != null) this.hud.display("2");
 		this.step = 2;
 	}
 	else if(this.step == 2 && this.timer.time.elapsed >= 3*this.countDownDelay+this.startDelay)
 	{
-		this.hud != null && this.hud.display("1");
+		if(this.hud != null) this.hud.display("1");
 		this.step = 3;
 	}
 	else if(this.step == 3 && this.timer.time.elapsed >= 4*this.countDownDelay+this.startDelay)
 	{
-		this.hud != null && this.hud.display("Go", 0.5);
+		if(this.hud != null) this.hud.display("Go", 0.5);
 		this.step = 4;
 		this.timer.start();
 		

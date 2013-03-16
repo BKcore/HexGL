@@ -15,6 +15,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 
 	this.active = true;
 	this.destroyed = false;
+	this.falling = false;
 
 	this.dom = domElement;
 	this.mesh = null;
@@ -96,6 +97,8 @@ bkcore.hexgl.ShipControls = function(ctx)
 	this.repulsionAmount = 0.0;
 	this.repulsionForce = new THREE.Vector3();
 
+	this.fallVector = new THREE.Vector3(0,-20,0);
+
 	this.resetPos = null;
 	this.resetRot = null;
 
@@ -115,16 +118,40 @@ bkcore.hexgl.ShipControls = function(ctx)
 		right: false
 	};
 
-	this.touchController = bkcore.TouchController.isTouchable() ? new bkcore.TouchController(
-		domElement, ctx.width/2, 
-		function(state, touch, event){
-			if(event.touches.length <= 1)
-				self.key.forward = false;
-			else
-				self.key.forward = true;
-			console.log(event.touches.length);
-			console.log(self.key.forward);
-		}) : null;
+	this.touchController = null;
+	this.orientationController = null;
+
+	if(ctx.controlType == 1 && bkcore.controllers.TouchController.isCompatible())
+	{
+		this.touchController = new bkcore.controllers.TouchController(
+			domElement, ctx.width/2, 
+			function(state, touch, event){
+				if(event.touches.length >= 4)
+					window.location.reload(false);
+				else if(event.touches.length == 3)
+					ctx.restart();
+				else if(event.touches.length <= 1)
+					self.key.forward = false;
+				else
+					self.key.forward = true;
+			});
+	}
+	else if(ctx.controlType == 2 && bkcore.controllers.OrientationController.isCompatible())
+	{
+		this.orientationController = new bkcore.controllers.OrientationController(
+			domElement, true,
+			function(state, touch, event){
+				console.log(event.touches.length);
+				if(event.touches.length >= 4)
+					window.location.reload(false);
+				else if(event.touches.length == 3)
+					ctx.restart();
+				else if(event.touches.length < 1)
+					self.key.forward = false;
+				else
+					self.key.forward = true;
+			});
+	}
 
 	function onKeyDown(event) 
 	{
@@ -212,8 +239,28 @@ bkcore.hexgl.ShipControls.prototype.destroy = function()
 	this.collision.right = false;
 }
 
+
+bkcore.hexgl.ShipControls.prototype.fall = function()
+{
+	this.active = false;
+	this.collision.front = false;
+	this.collision.left = false;
+	this.collision.right = false;
+	this.falling = true;
+	_this = this;
+	setTimeout(function(){
+		_this.destroyed = true;
+	}, 1500);
+}
+
 bkcore.hexgl.ShipControls.prototype.update = function(dt)
 {
+	if(this.falling)
+	{
+		this.mesh.position.addSelf(this.fallVector);
+		return;
+	}
+
 	if(!this.active) return;
 
 	this.rotation.y = 0;
@@ -228,6 +275,11 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 	{
 		angularAmount -= this.touchController.stickVector.x/100 * this.angularSpeed * dt;
 		rollAmount += this.touchController.stickVector.x/100 * this.rollAngle;
+	}
+	if(this.orientationController != null)
+	{
+		angularAmount += this.orientationController.beta/45 * this.angularSpeed * dt;
+		rollAmount -= this.orientationController.beta/45 * this.rollAngle;
 	}
 
 	if(this.key.forward)
@@ -476,6 +528,17 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 			this.repulsionForce.z += -this.repulsionAmount*4;
 			this.collision.front = true;
 			this.speed = 0;
+		}
+
+		// DIRTY GAMEOVER
+		if(rCol < 128 && lCol < 128)
+		{
+			var fCol = this.collisionMap.getPixel(Math.round(pos.x+2), Math.round(pos.z+2)).r;
+			if(fCol < 128)
+			{
+				console.log('GAMEOVER');
+				this.fall();
+			}
 		}
 
 		this.speed *= this.collisionSpeedDecrease;
