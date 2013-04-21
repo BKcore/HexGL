@@ -182,33 +182,6 @@
 		<script src="bkcore/hexgl/HexGL.js"></script>
 
 		<script>
-			try {
-				var request = navigator.mozApps.getSelf();
-				request.onsuccess = function() {
-				  if (request.result) {
-				    // we're installed
-				  } else {
-				    // not installed
-				    var conf = confirm('Would you like to install HexGL as an app?');
-				    if(conf)
-				    {
-				    	var irequest = navigator.mozApps.install("http://ffos.hexgl.bkcore.com/package.webapp");
-						irequest.onsuccess = function() {
-						  alert('HexGL is now installed. Please launch the app from the homescreen to cache assets.');
-						};
-						irequest.onerror = function(e) {
-						  alert('Error: '+irequest.error.name);
-						};
-				    }
-				  }
-				};
-				request.onerror = function() {
-				  console.warn('Error checking installation status: ' + this.error.message);
-				};
-			}catch(e){
-				//TODO
-			}
-
 			var SCREEN_WIDTH = window.innerWidth;
 			var SCREEN_HEIGHT = window.innerHeight;
 
@@ -254,6 +227,10 @@
 			}
 
 			function start() {
+
+				document.body.addEventListener('touchmove',function(e){
+      				e.preventDefault();
+ 				});
 
 				controls1.style.display = "none";
 				controls2.style.display = "none";
