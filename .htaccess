@@ -1,0 +1,4 @@
+AddType application/x-web-app-manifest+json .webapp
+ExpiresByType application/x-web-app-manifest+json "access"
+AddType text/cache-manifest .appcache
+ExpiresByType text/cache-manifest "access"

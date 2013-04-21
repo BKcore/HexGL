@@ -1,0 +1,204 @@
+body {
+    overflow: hidden;
+    font-family: "Ubuntu sans", Arial, sans-serif;
+    font-size: 14px;
+    color: #ddd;
+    line-height: 1em;
+    background: #1e1e1e;
+}
+
+#panel-center {
+    margin: 0;
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    bottom: 0;
+    left: 200px;
+    right: 400px;
+}
+
+#panel-left {
+    margin: 0;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+
+    background: #191919;
+}
+
+#panel-right {
+    margin: 0;
+    position: absolute;
+    z-index: 30;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 400px;
+
+    background: #191919;
+}
+
+#editor { 
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 50%;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+#diagram { 
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+    top: 50%;
+    left: 0;
+    right: 0;
+    z-index: 200;
+}
+
+#editor-separator, #preview-separator {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 300;
+    background: #191919;
+    border-top: 1px solid #292929;
+    border-bottom: 1px solid #292929;
+}
+#preview-separator {
+    z-index: 400;
+    left: 3px;
+}
+
+#left-separator {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 3px;
+    z-index: 300;
+    background: #191919;
+}
+
+#right-separator {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    z-index: 300;
+    background: #191919;
+}
+
+#preview {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 50%;
+    left: 3px;
+    width: 396px;
+
+    background: #1e1e1e;    
+    border-left: 1px solid #292929;
+    z-index: 210;
+}
+
+#console { 
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+    top: 50%;
+    left: 0;
+    left: 3px;
+    width: 396px;
+    z-index: 220;
+    background: #1e1e1e;    
+    border-left: 1px solid #292929;
+}
+
+#console-text {
+    background: transparent;
+    border: none;
+    width: 100%;
+    height: 100%;
+    color: #666;
+    text-shadow: 0px 1px 1px #000000;
+    filter: dropshadow(color=#000000, offx=0, offy=1);
+    padding: 6px;
+    outline: none;
+    overflow: hidden;
+    scroll: none;
+}
+
+#preview canvas {
+    background: #161616;
+}
+
+#modules { 
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 196px;
+
+    font-size: 13px;
+
+    background: #1e1e1e;
+    border-right: 1px solid #292929;
+}
+
+#modules ul {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    list-style: none;
+    margin: 10px 0;
+    padding: 0;
+}
+
+#modules li {
+    list-style: none;
+    line-height: 2.0em;
+    padding: 0 20px;
+    background: #1e1e1e;
+    cursor: pointer;
+
+    text-shadow: 0px 1px 1px #000000;
+    filter: dropshadow(color=#000000, offx=0, offy=1);
+}
+
+#modules li:hover {
+    background: #434343; /* Old browsers */
+    background: -moz-linear-gradient(top, #888 0%, #4e4e4e 4%, #434343 96%, #1e1e1e 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#888), color-stop(4%,#4e4e4e), color-stop(96%,#434343), color-stop(100%,#1e1e1e)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #888 0%, #4e4e4e 4%, #434343 96%, #1e1e1e 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #888 0%, #4e4e4e 4%, #434343 96%, #1e1e1e 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #888 0%, #4e4e4e 4%, #434343 96%, #1e1e1e 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #888 0%, #4e4e4e 4%, #434343 96%, #1e1e1e 100%); /* W3C */
+
+}
+
+#modules li.active {
+    background: #292929;
+}
+
+#render
+{
+    position: absolute;
+    z-index: 9999999;
+}

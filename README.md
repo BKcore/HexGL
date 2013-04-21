@@ -15,6 +15,14 @@ To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/
 
 If you feel like you deserve another license for a special case, [drop me a note](http://bkcore.com/contact.html), and we'll talk about it.
 
+## Installation
+
+	cd ~/
+	git clone git://github.com/BKcore/HexGL.git
+	cd HexGL
+	python -m SimpleHTTPServer
+	chromium index.html
+
 ## Regarding the code
 
 As of now the code is pretty much raw and undocumented. I'll be commenting it someday, but that won't be until I've finished the next content update and code refactoring sorry!

@@ -19,8 +19,9 @@ bkcore.hexgl.HexGL = function(opts)
 
 	this.a = window.location.href;
 
+	this.mobile = opts.mobile == undefined ? false : opts.mobile;
 	this.active = true;
-
+	this.displayHUD = opts.hud == undefined ? true : opts.hud;
 	this.width = opts.width == undefined ? window.innerWidth : opts.width;
 	this.height = opts.height == undefined ? window.innerHeight : opts.height;
 
@@ -31,6 +32,10 @@ bkcore.hexgl.HexGL = function(opts)
 	this.half = opts.half == undefined ? false : opts.half;
 
 	this.track = bkcore.hexgl.tracks[ opts.track == undefined ? 'Cityscape' : opts.track ];
+
+	this.mode = opts.mode == undefined ? 'timeattack' : opts.mode;
+
+	this.controlType = opts.controlType == undefined ? 1 : opts.controlType;
 
 	if(this.half)
 	{
@@ -53,6 +58,10 @@ bkcore.hexgl.HexGL = function(opts)
 	this.containers = {};
 	this.containers.main = opts.container == undefined ? document.body : opts.container;
 	this.containers.overlay = opts.overlay == undefined ? document.body : opts.overlay;
+
+	this.gameover = opts.gameover == undefined ? null : opts.gameover;
+
+	this.godmode = opts.godmode == undefined ? false : opts.godmode;
 
 	this.hud = null;
 
@@ -84,7 +93,7 @@ bkcore.hexgl.HexGL.prototype.start = function()
 
 	function raf()
 	{
-		requestAnimationFrame( raf );
+		if(self && self.active) requestAnimationFrame( raf );
 		self.update();
 	}
 
@@ -102,7 +111,8 @@ bkcore.hexgl.HexGL.prototype.reset = function()
 
 bkcore.hexgl.HexGL.prototype.restart = function()
 {
-	this.document.getElementById('finish').style.display = 'none';
+	try{ this.document.getElementById('finish').style.display = 'none'; }
+	catch(e){};
 	this.reset();
 }
 
@@ -120,16 +130,16 @@ bkcore.hexgl.HexGL.prototype.init = function()
 {
 	this.initHUD();
 
-	this.track.buildMaterials(this.quality);
+	this.track.buildMaterials(this.quality, this.mobile);
 
-	this.track.buildScenes(this, this.quality);
+	this.track.buildScenes(this, this.quality, this.mobile);
 
 	this.initGameComposer();
 }
 
 bkcore.hexgl.HexGL.prototype.load = function(opts)
 {
-	this.track.load(opts, this.quality);
+	this.track.load(opts, this.quality, this.mobile);
 }
 
 bkcore.hexgl.HexGL.prototype.initGameplay = function()
@@ -137,16 +147,13 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 	var self = this;
 
 	this.gameplay = new bkcore.hexgl.Gameplay({
-		mode: "timeattack",
+		mode: this.mode,
 		hud: this.hud,
 		shipControls: this.components.shipControls,
+		cameraControls: this.components.cameraChase,
 		analyser: this.track.analyser,
 		pixelRatio: this.track.pixelRatio,
-		track: {
-			checkpoints: this.track.checkpoints,
-			spawn: this.track.spawn,
-			spawnRotation: this.track.spawnRotation
-		},
+		track: this.track,
 		onFinish: function() {
 			self.displayScore(this.finishTime, this.lapTimes);
 		}
@@ -157,7 +164,24 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 
 bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 {
-	var t = 'cityscape';
+	this.active = false;
+
+	var tf = bkcore.Timer.msToTimeString(f);
+	var tl = [
+		bkcore.Timer.msToTimeString(l[0]),
+		bkcore.Timer.msToTimeString(l[1]),
+		bkcore.Timer.msToTimeString(l[2])
+	];
+
+	if(this.mobile)
+	{
+		this.gameover.style.display = "block";
+		this.gameover.innerHTML = tf.m + "'" + tf.s + "''" + tf.ms;
+		this.containers.main.style.display = "none";
+		return; 
+	}
+
+	var t = this.track;
 	var dc = this.document.getElementById("finish");
 	var ds = this.document.getElementById("finish-state");
 	var dh = this.document.getElementById("finish-hallmsg");
@@ -172,12 +196,6 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 	var sl = this.document.getElementById("lowfps-msg");
 	var d = this.difficulty == 0 ? 'casual' : 'hard';
 	var ts = this.hud.timeSeparators;
-	var tf = bkcore.Timer.msToTimeString(f);
-	var tl = [
-		bkcore.Timer.msToTimeString(l[0]),
-		bkcore.Timer.msToTimeString(l[1]),
-		bkcore.Timer.msToTimeString(l[2])
-	];
 
 	if(this.gameplay.result == this.gameplay.results.FINISH)
 	{
@@ -189,6 +207,9 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 			{
 				dr != undefined && (dr.innerHTML = "New local record!");
 				localStorage['score-'+t+'-'+d] = f;
+
+				// Export race data
+				localStorage['race-'+t+'-replay'] = JSON.Stringify(this.gameplay.raceData.export());
 			}
 			else
 			{
@@ -250,12 +271,15 @@ bkcore.hexgl.HexGL.prototype.initRenderer = function()
 		clearColor: 0x000000
 	});
 
-	renderer.physicallyBasedShading = true;
-	renderer.gammaInput = true;
-	renderer.gammaOutput = true;
 
-	renderer.shadowMapEnabled = true;
-	renderer.shadowMapSoft = true;
+	if(this.quality > 0 && !this.mobile)
+	{
+		renderer.physicallyBasedShading = true;
+		renderer.gammaInput = true;
+		renderer.gammaOutput = true;
+		renderer.shadowMapEnabled = true;
+		renderer.shadowMapSoft = true;
+	}
 
 	renderer.autoClear = false;
 	renderer.sortObjects = false;
@@ -263,12 +287,14 @@ bkcore.hexgl.HexGL.prototype.initRenderer = function()
 	renderer.domElement.style.position = "relative";
 
 	this.containers.main.appendChild( renderer.domElement );	
+	this.canvas = renderer.domElement;
 	this.renderer = renderer;
 	this.manager = new bkcore.threejs.RenderManager(renderer);
 }
 
 bkcore.hexgl.HexGL.prototype.initHUD = function()
 {
+	if(!this.displayHUD) return;
 	this.hud = new bkcore.hexgl.HUD({
 		width: this.width,
 		height: this.height,
@@ -293,7 +319,8 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 
 	this.composers.game = new THREE.EffectComposer( this.renderer, renderTarget );
 
-	var effectScreen = new THREE.ShaderPass( THREE.ShaderExtras[ "screen" ] );				
+	var effectScreen = new THREE.ShaderPass( THREE.ShaderExtras[ "screen" ] );	
+	effectScreen.renderToScreen = true;			
 	var effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] );
 
 	var effectHex = new THREE.ShaderPass( bkcore.threejs.Shaders[ "hexvignette" ] );
@@ -308,7 +335,7 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 	this.composers.game.addPass( renderSky );
 	this.composers.game.addPass( renderModel );
 
-	if(this.quality > 0)
+	if(this.quality > 0 && !this.mobile)
 	{
 		var effectFXAA = new THREE.ShaderPass( THREE.ShaderExtras[ "fxaa" ] );
 		effectFXAA.uniforms[ 'resolution' ].value.set( 1 / this.width, 1 / this.height );
@@ -317,7 +344,7 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 		
 		this.extras.fxaa = effectFXAA;
 	}
-	if(this.quality > 1)
+	if(this.quality > 1 && !this.mobile)
 	{	
 		var effectBloom = new THREE.BloomPass( 0.8, 25, 4 , 256);
 
@@ -326,7 +353,10 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 		this.extras.bloom = effectBloom;
 	}
 
-	this.composers.game.addPass( effectHex );
+	if(!this.mobile || this.quality > 0)
+		this.composers.game.addPass( effectHex );
+	else
+		this.composers.game.addPass( effectScreen );
 
 	
 }
@@ -339,7 +369,7 @@ bkcore.hexgl.HexGL.prototype.createMesh = function(parent, geometry, x, y, z, ma
 	mesh.position.set( x, y, z );
 	parent.add(mesh);
 
-	if(this.quality > 0)
+	if(this.quality > 0 && !this.mobile)
 	{
 		mesh.castShadow = true;
 		mesh.receiveShadow = true;
@@ -389,4 +419,7 @@ bkcore.hexgl.HexGL.prototype.tweakShipControls = function()
 		c.driftLerp = 0.3;
 		c.angularLerp = 0.4;
 	}
+
+	if(this.godmode)
+		c.shieldDamage = 0.0;
 }
