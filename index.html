@@ -255,6 +255,10 @@
 
 			function start() {
 
+				document.body.addEventListener('touchmove',function(e){
+      				e.preventDefault();
+ 				});
+
 				controls1.style.display = "none";
 				controls2.style.display = "none";
 				container.style.display = "block";
