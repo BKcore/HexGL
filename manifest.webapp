@@ -1,7 +1,7 @@
 {
 	"name": "HexGL",
 	"description": "HexGL v1.0.1-ffos",
-	"launch_path": "/index.html",
+	"launch_path": "/index-mobile.html",
 	"icons": {
 		"32": "/icon_32.png",
 		"64": "/icon_64.png",

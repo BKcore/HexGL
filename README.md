@@ -5,7 +5,7 @@ Source code of [HexGL](http://hexgl.bkcore.com), the futuristic HTML5 racing gam
 
 ## License
 
-Unless specified in the file, HexGL's code and resources are licensed under the *Creative Commons Attribution-NonCommercial 3.0 Unported License*. 
+Unless specified in the file, HexGL's code and resources are licensed under the *Creative Commons Attribution-NonCommercial 3.0 Unported License*.
 
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
 
@@ -18,6 +18,8 @@ If you feel like you deserve another license for a special case, [drop me a note
 	cd HexGL
 	python -m SimpleHTTPServer
 	chromium index.html
+
+To use full size textures, swap the two textures/ and textures.full/ directories.
 
 ## Regarding the code
 

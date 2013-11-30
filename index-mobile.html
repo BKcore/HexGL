@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en" manifest="cache.appcache">
+	<head>
+		<title>HexGL</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="css/fonts.css" type="text/css" charset="utf-8">
+		<link rel="icon" href="/icon_256.png" type="image/png">
+		<link rel="shortcut icon" href="/icon_256.png" type="image/png">
+		<style>
+			html { background: #000000; }
+			body {
+				background: url('css/mobile.jpg') no-repeat center center fixed;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-ms-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+				font-family:georgia;
+				text-align:center;
+				color: #666;
+			}
+			h1 {color: #666	; }
+			a { color:skyblue }
+			/*canvas { pointer-events:none; }*/
+			html, body, #main, #titles, #controls, #over, #loading, canvas { width: 100%; height: 100%;}
+			#overlay, #titles, #controls-1, #controls-2, #over, #loading {
+				position: absolute;
+				z-index: 1000;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+			}
+			#titles{
+				z-index: 1001;
+			}
+			#controls-1{
+				z-index: 1002;
+				background: url('css/mobile-controls-1.jpg') no-repeat center center fixed;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-ms-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				display: none;
+			}
+			#controls-2{
+				z-index: 1003;
+				background: url('css/mobile-controls-2.jpg') no-repeat center center fixed;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-ms-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				display: none;
+			}
+			#over{
+				z-index: 1004;
+				background: url('css/mobile-over.jpg') no-repeat center center fixed;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-ms-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				display: none;
+			}
+			#loading{
+				display: none;
+				color: #fff;
+			}
+			#loading div{
+				position: absolute;
+				bottom: 20px;
+				right: 20px;
+				text-align: right;
+				font-size: 3em;
+				font-weight: bold;
+				font-family: arial, sans-serif;
+			}
+			#titles-logo{
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 40%;
+				text-align: center;
+				font-size: 4em;
+				font-weight: bold;
+				font-family: arial, sans-serif;
+				text-decoration: none;
+				color: #444444;
+				text-indent: -99999px;
+			}
+			#titles-logo div{
+				display: block;
+				top: 50%;
+				position: absolute;
+				margin-top: -40px;
+				line-height: 80px;
+				width: 100%;
+				text-align: center;
+			}
+			#titles-buttons{
+				position: absolute;
+				left: 60%;
+				width: 40%;
+				height: 100%;
+				border: none;
+				border-collapse: collapse;
+			}
+			#titles-button tr td{
+			}
+			.titles-button{
+				vertical-align: middle;
+				text-align: center;
+				font-size: 2em;
+				font-weight: bold;
+				font-family: arial, sans-serif;
+				text-decoration: none;
+				color: #ffffff;
+				cursor: pointer;
+			}
+			.titles-button:active, .titles-button:focus{
+				color: skyblue;
+			}
+		</style>
+		<link rel="stylesheet" href="css/touchcontroller.css" type="text/css" charset="utf-8">
+	</head>
+
+	<body>
+		<div id="titles">
+			<div id="titles-logo"><div>HexGL</div></div>
+			<table id="titles-buttons">
+				<tr><td class="titles-button" id="s-quality" onclick="rollQuality();">QUALITY: SD</td></tr>
+				<tr><td class="titles-button" id="s-controls" onclick="rollControls();">CONTROLS: TOUCH</td></tr>
+				<tr><td class="titles-button" onclick="init();">START</td></tr>
+			</table>
+		</div>
+		<div id="controls-1" onclick="start();"></div>
+		<div id="controls-2" onclick="start();"></div>
+		<div id="over" onclick="restart();"></div>
+		<div id="loading"><div>Loading...</div></div>
+		<div id="overlay"></div>
+		<div id="main"></div>
+
+		<script src="libs/Three.dev.js"></script>
+		<script src="libs/ShaderExtras.js"></script>
+		<script src="libs/postprocessing/EffectComposer.js"></script>
+		<script src="libs/postprocessing/RenderPass.js"></script>
+		<script src="libs/postprocessing/BloomPass.js"></script>
+		<script src="libs/postprocessing/ShaderPass.js"></script>
+		<script src="libs/postprocessing/MaskPass.js"></script>
+		<script src="libs/Detector.js"></script>
+		<script src="libs/Stats.js"></script>
+		<script src="libs/DAT.GUI.min.js"></script>
+
+		<script src="bkcore.coffee/controllers/TouchController.js"></script>
+		<script src="bkcore.coffee/controllers/OrientationController.js"></script>
+
+		<script src="bkcore/Timer.js"></script>
+		<script src="bkcore/ImageData.js"></script>
+		<script src="bkcore/Utils.js"></script>
+
+		<script src="bkcore/threejs/RenderManager.js"></script>
+		<script src="bkcore/threejs/Shaders.js"></script>
+		<script src="bkcore/threejs/Particles.js"></script>
+		<script src="bkcore/threejs/Loader.js"></script>
+
+		<script src="bkcore/hexgl/HUD.js"></script>
+		<script src="bkcore/hexgl/RaceData.js"></script>
+		<script src="bkcore/hexgl/ShipControls.js"></script>
+		<script src="bkcore/hexgl/ShipEffects.js"></script>
+		<script src="bkcore/hexgl/CameraChase.js"></script>
+		<script src="bkcore/hexgl/Gameplay.js"></script>
+
+		<script src="bkcore/hexgl/tracks/Cityscape.js"></script>
+
+		<script src="bkcore/hexgl/HexGL.js"></script>
+
+		<script>
+			try {
+				var request = navigator.mozApps.getSelf();
+				request.onsuccess = function() {
+				  if (request.result) {
+				    // we're installed
+				  } else {
+				    // not installed
+				    var conf = confirm('Would you like to install HexGL as an app?');
+				    if(conf)
+				    {
+				    	var irequest = navigator.mozApps.install("http://ffos.hexgl.bkcore.com/package.webapp");
+						irequest.onsuccess = function() {
+						  alert('HexGL is now installed. Please launch the app from the homescreen to cache assets.');
+						};
+						irequest.onerror = function(e) {
+						  alert('Error: '+irequest.error.name);
+						};
+				    }
+				  }
+				};
+				request.onerror = function() {
+				  console.warn('Error checking installation status: ' + this.error.message);
+				};
+			}catch(e){
+				//TODO
+			}
+
+			var SCREEN_WIDTH = window.innerWidth;
+			var SCREEN_HEIGHT = window.innerHeight;
+
+			var container, hudcontainer;
+
+			var hexGL;
+
+			var q = 0, qmax = 2, c = 1, cmax = 2;
+			var sq = ['SD', 'HD', 'ULTRA'];
+			var sc = ['NONE', 'TOUCH', 'MOTION'];
+
+			var	titles = document.getElementById("titles")
+			var	hudcontainer = document.getElementById("overlay");
+			var	gameover = document.getElementById("over");
+			var	controls1 = document.getElementById("controls-1");
+			var	controls2 = document.getElementById("controls-2");
+			var	squality = document.getElementById("s-quality");
+			var	scontrols = document.getElementById("s-controls");
+			var	loading = document.getElementById("loading");
+			var	container = document.getElementById("main");
+
+			function rollQuality() {
+				q++;
+				if(q > qmax) q = 0;
+				squality.innerHTML = "QUALITY: " + sq[q];
+			}
+
+			function rollControls() {
+				c++;
+				if(c > cmax) c = 1;
+				scontrols.innerHTML = "CONTROLS: " + sc[c];
+			}
+
+			function init() {
+				titles.style.display = "none";
+				this['controls'+c].style.display = "block";
+			}
+
+			function restart() {
+				/*titles.style.display = "block";
+				gameover.style.display = "none";*/
+				location.reload(false);
+			}
+
+			function start() {
+
+				controls1.style.display = "none";
+				controls2.style.display = "none";
+				container.style.display = "block";
+				loading.style.display = "block";
+
+				quality = q < 2 ? 0 : 1;
+				half = q < 1;
+
+				hexGL = new bkcore.hexgl.HexGL({
+					document: document,
+					width: SCREEN_WIDTH,
+					height: SCREEN_HEIGHT,
+					container: container,
+					overlay: overlay,
+					gameover: gameover,
+					quality: quality,
+					track: 'Cityscape',
+					hud: false,
+					half: half,
+					mobile: true,
+					controlType: c,
+					godmode: true
+				});
+
+				hexGL.load({
+					onLoad: function(){
+						console.log("ALL LOADED.");
+						hexGL.init();
+						loading.style.display = "none";
+						hexGL.start();
+					},
+					onError: function(s){
+						console.log("ERROR ON "+s+".");
+					},
+					onProgress: function(p, t, n)
+					{
+						console.log("LOADED "+t+" : "+n+" ( "+p.loaded+" / "+p.total+" ).");
+					}
+				});
+			}
+			
+			//init();
+
+		</script>
+
+	</body>
+</html>
