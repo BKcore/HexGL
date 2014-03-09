@@ -49,6 +49,12 @@
   user-select: none;
 }
 
+html, body {
+  overflow: hidden;
+  font-family: 'BebasNeueRegular', arial, sans-serif;
+  background: white;
+}
+
 #global {
   position: absolute;
   top: 0;
@@ -121,7 +127,7 @@
 
 #menu div {
   padding: 0.1em 0 0 0;
-  margin: 0.1em 0;
+  margin: 0 0;
   cursor: pointer;
   -moz-text-shadow: 0 0 10px rgb(255,255,255);
   -webkit-text-shadow: 0 0 10px rgb(255,255,255);
@@ -154,4 +160,44 @@
 
 #start:hover {
   color: #f8854b !important;
+}
+
+#step-2 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: black;
+  vertical-align: bottom;
+  text-align: right;
+  padding: 20px;
+  color: white;
+  font-size: 2em;
+  background-repeat: no-repeat;
+  background-position: center center;
+  -moz-background-size: auto 50%;
+  -webkit-background-size: auto 50%;
+  -ms-background-size: auto 50%;
+  -o-background-size: auto 50%;
+  background-size: auto 70%;
+}
+
+#step-3 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: black;
+}
+
+#step-3 #progressbar {
+  position: absolute;
+  top: 0;
+  right: auto;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  background: white;
 }

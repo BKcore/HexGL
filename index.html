@@ -23,19 +23,30 @@
   </head>
 
   <body>
-    <div id="global"></div>
-    <div id="title">
-    </div>
-    <div id="menucontainer">
-      <div id="menu">
-        <div id="start">Start</div>
-        <div>Controls: LeapMotion</div>
-        <div>Graphics: High</div>
-        <div>GodMode: On</div>
+    <div id="step-1">
+      <div id="global"></div>
+      <div id="title">
+      </div>
+      <div id="menucontainer">
+        <div id="menu">
+          <div id="start">Start</div>
+          <div id="s-controlType">Controls: LeapMotion</div>
+          <div id="s-quality">Quality: High</div>
+          <div id="s-platform">Platform: Desktop</div>
+          <div id="s-godmode">Godmode: On</div>
+        </div>
       </div>
     </div>
-    <div id="overlay"></div>
-    <div id="main"></div>
+    <div id="step-2" style="display: none">
+      <div id="ctrl-help">Click/Touch to continue.</div>
+    </div>
+    <div id="step-3" style="display: none">
+      <div id="progressbar"></div>
+    </div>
+    <div id="step-4" style="display: none">
+      <div id="overlay"></div>
+      <div id="main"></div>
+    </div>
 
     <script src="libs/leap-0.4.1.min.js"></script>
     <script src="libs/Three.dev.js"></script>
@@ -72,51 +83,7 @@
 
     <script src="bkcore/hexgl/HexGL.js"></script>
 
-    <script>
-
-      var SCREEN_WIDTH = window.innerWidth;
-      var SCREEN_HEIGHT = window.innerHeight;
-
-      var container, hudcontainer;
-
-      var hexGL;
-
-      function init() {
-        hudcontainer = document.getElementById("overlay");
-        container = document.getElementById("main");
-
-        hexGL = new bkcore.hexgl.HexGL({
-          document: document,
-          width: SCREEN_WIDTH,
-          height: SCREEN_HEIGHT,
-          container: container,
-          overlay: overlay,
-          quality: bkcore.Utils.getURLParameter('quality'),
-          difficulty: bkcore.Utils.getURLParameter('difficulty'),
-          half: bkcore.Utils.getURLParameter('half'),
-          mode: bkcore.Utils.getURLParameter('mode'),
-          controlType: 3,
-          godmode: (bkcore.Utils.getURLParameter('godmode') == '1'),
-          track: 'Cityscape'
-        });
-
-        hexGL.load({
-          onLoad: function(){
-            console.log("ALL LOADED.");
-            hexGL.init();
-            hexGL.start();
-          },
-          onError: function(s){
-            console.log("ERROR ON "+s+".");
-          },
-          onProgress: function(p, t, n)
-          {
-            console.log("LOADED "+t+" : "+n+" ( "+p.loaded+" / "+p.total+" ).");
-          }
-        });
-      }
-
-    </script>
+    <script src="launch.js"></script>
 
   </body>
 </html>

@@ -136,7 +136,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 					self.key.forward = true;
 			});
 	}
-	else if(ctx.controlType == 2 && bkcore.controllers.OrientationController.isCompatible())
+	else if(ctx.controlType == 3 && bkcore.controllers.OrientationController.isCompatible())
 	{
 		this.orientationController = new bkcore.controllers.OrientationController(
 			domElement, true,
@@ -152,7 +152,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 					self.key.forward = true;
 			});
 	}
-	else if(ctx.controlType == 3)
+	else if(ctx.controlType == 2)
 	{
 		if(Leap == null)
 			throw new Error("Unable to reach LeapJS!");
