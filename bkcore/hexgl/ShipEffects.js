@@ -1,7 +1,7 @@
  /*
  * HexGL
  * @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
- * @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License. 
+ * @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License.
  *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
@@ -46,7 +46,7 @@ bkcore.hexgl.ShipEffects = function(opts)
 				texture: opts.textureSpark,
 				size: 2,
 				life: 60,
-				max: 500
+				max: 200
 			}),
 
 			leftClouds: new bkcore.threejs.Particles(
@@ -59,7 +59,7 @@ bkcore.hexgl.ShipEffects = function(opts)
 				size: 6,
 				blending: THREE.NormalBlending,
 				life: 60,
-				max: 500,
+				max: 200,
 				spawn: new THREE.Vector3(3,-0.3,0),
 				spawnRadius: new THREE.Vector3(1,1,2),
 				velocity: new THREE.Vector3(0,0,-0.4),
@@ -75,7 +75,7 @@ bkcore.hexgl.ShipEffects = function(opts)
 				texture: opts.textureSpark,
 				size: 2,
 				life: 60,
-				max: 500
+				max: 200
 			}),
 
 			rightClouds: new bkcore.threejs.Particles(
@@ -88,7 +88,7 @@ bkcore.hexgl.ShipEffects = function(opts)
 				size: 6,
 				blending: THREE.NormalBlending,
 				life: 60,
-				max: 500,
+				max: 200,
 				spawn: new THREE.Vector3(-3,-0.3,0),
 				spawnRadius: new THREE.Vector3(1,1,2),
 				velocity: new THREE.Vector3(0,0,-0.4),
@@ -105,7 +105,7 @@ bkcore.hexgl.ShipEffects = function(opts)
 
 bkcore.hexgl.ShipEffects.prototype.update = function(dt)
 {
-	var boostRatio, opacity, scale, intensity, random; 
+	var boostRatio, opacity, scale, intensity, random;
 
 	if(this.shipControls.destroyed)
 	{
@@ -144,8 +144,8 @@ bkcore.hexgl.ShipEffects.prototype.update = function(dt)
 		this.particles.leftSparks.velocity.copy(this.pVel).x *= -1;
 		this.particles.leftSparks.spawn.copy(this.pOffset).x *= -1;
 
-		if(this.shipControls.mesh) 
-		{ 
+		if(this.shipControls.mesh)
+		{
 			// RIGHT
 			this.shipControls.mesh.matrix.rotateAxis(this.particles.rightSparks.spawn);
 			this.particles.rightSparks.spawn.multiplyScalar(this.pOffsetS).addSelf(this.shipControls.dummy.position);
@@ -168,14 +168,14 @@ bkcore.hexgl.ShipEffects.prototype.update = function(dt)
 
 		if(this.shipControls.collision.right)
 		{
-			this.particles.rightSparks.emit(Math.round(30*dt));
-			this.particles.rightClouds.emit(Math.round(10*dt));
+			this.particles.rightSparks.emit(10);
+			this.particles.rightClouds.emit(5);
 		}
 
 		if(this.shipControls.collision.left)
 		{
-			this.particles.leftSparks.emit(Math.round(30*dt));
-			this.particles.leftClouds.emit(Math.round(10*dt));
+			this.particles.leftSparks.emit(10);
+			this.particles.leftClouds.emit(5);
 		}
 
 		this.particles.rightSparks.update(dt);

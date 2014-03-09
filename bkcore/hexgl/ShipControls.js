@@ -1,7 +1,7 @@
  /*
  * HexGL
  * @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
- * @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License. 
+ * @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License.
  *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
@@ -27,7 +27,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 	this.thrust = 0.02;
 	this.airBrake = 0.02;
 	this.maxSpeed = 7.0;
-	this.boosterSpeed = this.maxSpeed * 0.4;
+	this.boosterSpeed = this.maxSpeed * 0.2;
 	this.boosterDecay = 0.01;
 	this.angularSpeed = 0.005;
 	this.airAngularSpeed = 0.0065;
@@ -75,7 +75,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 	this.rollAngle = 0.6;
 	this.rollLerp = 0.08;
 	this.rollDirection = new THREE.Vector3(0,0,1);
-	
+
 	this.gradient = 0.0;
 	this.gradientTarget = 0.0;
 	this.gradientLerp = 0.05;
@@ -124,7 +124,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 	if(ctx.controlType == 1 && bkcore.controllers.TouchController.isCompatible())
 	{
 		this.touchController = new bkcore.controllers.TouchController(
-			domElement, ctx.width/2, 
+			domElement, ctx.width/2,
 			function(state, touch, event){
 				if(event.touches.length >= 4)
 					window.location.reload(false);
@@ -152,10 +152,32 @@ bkcore.hexgl.ShipControls = function(ctx)
 					self.key.forward = true;
 			});
 	}
-
-	function onKeyDown(event) 
+	else if(ctx.controlType == 3)
 	{
-		switch(event.keyCode) 
+		if(Leap == null)
+			throw new Error("Unable to reach LeapJS!");
+
+		var leapController = {
+			palmNormal: [0, 0, 0]
+		};
+		this.leapController = leapController;
+
+		Leap.loop(function(obj) {
+			hand = obj.hands[0];
+			if(typeof hand === 'undefined')
+			{
+				leapController.palmNormal = [0, 0, 0];
+			}
+			else
+			{
+				leapController.palmNormal = hand.palmNormal;
+			}
+		});
+	}
+
+	function onKeyDown(event)
+	{
+		switch(event.keyCode)
 		{
 			case 38: /*up*/	self.key.forward = true; break;
 
@@ -173,7 +195,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 		}
 	};
 
-	function onKeyUp(event) 
+	function onKeyUp(event)
 	{
 		switch(event.keyCode)
 		{
@@ -225,7 +247,7 @@ bkcore.hexgl.ShipControls.prototype.reset = function(position, rotation)
 
 	this.dummy.matrix.setPosition(this.dummy.position);
 	this.dummy.matrix.setRotationFromQuaternion(this.dummy.quaternion);
-	
+
 	this.mesh.matrix.identity();
 	this.mesh.applyMatrix(this.dummy.matrix);
 }
@@ -261,8 +283,6 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 		return;
 	}
 
-	if(!this.active) return;
-
 	this.rotation.y = 0;
 	this.movement.set(0,0,0);
 	this.drift += (0.0 - this.drift) * this.driftLerp;
@@ -270,57 +290,73 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 
 	var rollAmount = 0.0;
 	var angularAmount = 0.0;
+	var yawLeap = 0.0;
 
-	if(this.touchController != null)
+	if(this.leapController != null)
 	{
-		angularAmount -= this.touchController.stickVector.x/100 * this.angularSpeed * dt;
-		rollAmount += this.touchController.stickVector.x/100 * this.rollAngle;
-	}
-	if(this.orientationController != null)
-	{
-		angularAmount += this.orientationController.beta/45 * this.angularSpeed * dt;
-		rollAmount -= this.orientationController.beta/45 * this.rollAngle;
+		rollAmount -= this.leapController.palmNormal[0] * 3.5 * this.rollAngle;
+		yawLeap = -this.leapController.palmNormal[2] * 0.6;
 	}
 
-	if(this.key.forward)
-		this.speed += this.thrust * dt;
-	else
-		this.speed -= this.airResist * dt;
-	if(this.key.left)
+	if(this.active)
 	{
-		angularAmount += this.angularSpeed * dt;
-		rollAmount -= this.rollAngle;
-	}
-	if(this.key.right)
-	{
-		angularAmount -= this.angularSpeed * dt;
-		rollAmount += this.rollAngle;
-	}
-	if(this.key.ltrigger)
-	{
+
+		if(this.touchController != null)
+		{
+			angularAmount -= this.touchController.stickVector.x/100 * this.angularSpeed * dt;
+			rollAmount += this.touchController.stickVector.x/100 * this.rollAngle;
+		}
+		if(this.orientationController != null)
+		{
+			angularAmount += this.orientationController.beta/45 * this.angularSpeed * dt;
+			rollAmount -= this.orientationController.beta/45 * this.rollAngle;
+		}
+		if(this.leapController != null)
+		{
+			angularAmount += this.leapController.palmNormal[0] * 2 * this.angularSpeed * dt;
+			this.speed += Math.max(0.0, (0.5 + this.leapController.palmNormal[2])) * 3 * this.thrust * dt;
+		}
+
+		if(this.key.forward)
+			this.speed += this.thrust * dt;
+		else
+			this.speed -= this.airResist * dt;
 		if(this.key.left)
-			angularAmount += this.airAngularSpeed * dt;
-		else
-			angularAmount += this.airAngularSpeed * 0.5 * dt;
-		this.speed -= this.airBrake * dt;
-		this.drift += (this.airDrift - this.drift) * this.driftLerp;
-		this.movement.x += this.speed * this.drift * dt;
-		if(this.drift > 0.0)
-			this.movement.z -= this.speed * this.drift * dt;
-		rollAmount -= this.rollAngle * 0.7;
-	}
-	if(this.key.rtrigger)
-	{
+		{
+			angularAmount += this.angularSpeed * dt;
+			rollAmount -= this.rollAngle;
+		}
 		if(this.key.right)
-			angularAmount -= this.airAngularSpeed * dt;
-		else
-			angularAmount -= this.airAngularSpeed * 0.5 * dt;
-		this.speed -= this.airBrake * dt;
-		this.drift += (-this.airDrift - this.drift) * this.driftLerp;
-		this.movement.x += this.speed * this.drift * dt;
-		if(this.drift < 0.0)
-			this.movement.z += this.speed * this.drift * dt;
-		rollAmount += this.rollAngle * 0.7;
+		{
+			angularAmount -= this.angularSpeed * dt;
+			rollAmount += this.rollAngle;
+		}
+		if(this.key.ltrigger)
+		{
+			if(this.key.left)
+				angularAmount += this.airAngularSpeed * dt;
+			else
+				angularAmount += this.airAngularSpeed * 0.5 * dt;
+			this.speed -= this.airBrake * dt;
+			this.drift += (this.airDrift - this.drift) * this.driftLerp;
+			this.movement.x += this.speed * this.drift * dt;
+			if(this.drift > 0.0)
+				this.movement.z -= this.speed * this.drift * dt;
+			rollAmount -= this.rollAngle * 0.7;
+		}
+		if(this.key.rtrigger)
+		{
+			if(this.key.right)
+				angularAmount -= this.airAngularSpeed * dt;
+			else
+				angularAmount -= this.airAngularSpeed * 0.5 * dt;
+			this.speed -= this.airBrake * dt;
+			this.drift += (-this.airDrift - this.drift) * this.driftLerp;
+			this.movement.x += this.speed * this.drift * dt;
+			if(this.drift < 0.0)
+				this.movement.z += this.speed * this.drift * dt;
+			rollAmount += this.rollAngle * 0.7;
+		}
 	}
 
 	this.angular += (angularAmount - this.angular) * this.angularLerp;
@@ -376,7 +412,7 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 		this.mesh.matrix.identity();
 
 		// Gradient (Mesh only, no dummy physics impact)
-		var gradientDelta = (this.gradientTarget - this.gradient) * this.gradientLerp;
+		var gradientDelta = (this.gradientTarget - (yawLeap + this.gradient)) * this.gradientLerp;
 		if(Math.abs(gradientDelta) > this.epsilon) this.gradient += gradientDelta;
 		if(Math.abs(this.gradient) > this.epsilon)
 		{
@@ -505,9 +541,9 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 		var rPos = this.repulsionVRight.addSelf(pos);
 		var lCol = this.collisionMap.getPixel(Math.round(lPos.x), Math.round(lPos.z)).r;
 		var rCol = this.collisionMap.getPixel(Math.round(rPos.x), Math.round(rPos.z)).r;
-		
-		this.repulsionAmount = Math.max(0.8, 
-			Math.min(this.repulsionCap, 
+
+		this.repulsionAmount = Math.max(0.8,
+			Math.min(this.repulsionCap,
 				this.speed * this.repulsionRatio
 				)
 			);
@@ -608,7 +644,7 @@ bkcore.hexgl.ShipControls.prototype.heightCheck = function(dt)
 		x = this.heightMap.pixels.width/2 + this.tiltVector.x * this.heightPixelRatio;
 		z = this.heightMap.pixels.height/2 + this.tiltVector.z * this.heightPixelRatio;
 
-		nheight = this.heightMap.getPixelFBilinear(x, z) / this.heightScale + this.heightBias;		
+		nheight = this.heightMap.getPixelFBilinear(x, z) / this.heightScale + this.heightBias;
 	}
 
 	if(nheight < 16777)
@@ -626,7 +662,7 @@ bkcore.hexgl.ShipControls.prototype.getRealSpeed = function(scale)
 bkcore.hexgl.ShipControls.prototype.getRealSpeedRatio = function()
 {
 	return Math.min(
-		this.maxSpeed, 
+		this.maxSpeed,
 		this.speed+this.boost
 	) / this.maxSpeed;
 };

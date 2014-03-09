@@ -4,13 +4,19 @@
     <title>HexGL dev page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <link rel="stylesheet" href="css/multi.css" type="text/css" charset="utf-8">
     <link rel="stylesheet" href="css/fonts.css" type="text/css" charset="utf-8">
     <style>
       body {
+        background:#ccc;
         padding:0;
         margin:0;
+        overflow:hidden;
+        font-family:georgia;
+        text-align:center;
+        color: #666;
       }
+      h1 {color: #666 ; }
+      a { color:skyblue }
       canvas { pointer-events:none; }
       #overlay{
         position: absolute;
@@ -23,17 +29,6 @@
   </head>
 
   <body>
-    <div id="global"></div>
-    <div id="title">
-    </div>
-    <div id="menucontainer">
-      <div id="menu">
-        <div id="start">Start</div>
-        <div>Controls: LeapMotion</div>
-        <div>Graphics: High</div>
-        <div>GodMode: On</div>
-      </div>
-    </div>
     <div id="overlay"></div>
     <div id="main"></div>
 
@@ -115,6 +110,8 @@
           }
         });
       }
+
+      init();
 
     </script>
 
