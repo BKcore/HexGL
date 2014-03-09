@@ -1,23 +1,26 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>HexGL dev page</title>
+    <title>HexGL by BKcore</title>
     <meta charset="utf-8">
+    <meta name="description" content="HexGL is a futuristic racing game built by Thibaut Despoulain (BKcore) using HTML5, Javascript and WebGL. Come challenge your friends on this fast-paced 3D game!">
+    <meta property="og:title" content="HexGL, the HTML5 futuristic racing game." />
+    <meta property="og:type" content="game" />
+    <meta property="og:url" content="http://hexgl.bkcore.com/" />
+    <meta property="og:image" content="http://hexgl.bkcore.com/image.png" />
+    <meta property="og:site_name" content="HexGL by BKcore" />
+    <meta property="fb:admins" content="1482017639" />
+    <link rel="icon" href="http://hexgl.bkcore.com/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="http://hexgl.bkcore.com/favicon.png" type="image/png">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/multi.css" type="text/css" charset="utf-8">
     <link rel="stylesheet" href="css/fonts.css" type="text/css" charset="utf-8">
     <style>
       body {
-        background:#ccc;
         padding:0;
         margin:0;
-        overflow:hidden;
-        font-family:georgia;
-        text-align:center;
-        color: #666;
       }
-      h1 {color: #666 ; }
-      a { color:skyblue }
-      canvas { pointer-events:none; }
+      canvas { pointer-events:none; width: 100%;}
       #overlay{
         position: absolute;
         z-index: 9999;
@@ -26,12 +29,52 @@
         width: 100%;
       }
     </style>
+    <script type="text/javascript">
+    //analytics
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26274524-4']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
   </head>
 
   <body>
-    <div id="overlay"></div>
-    <div id="main"></div>
+    <div id="step-1">
+      <div id="global"></div>
+      <div id="title">
+      </div>
+      <div id="menucontainer">
+        <div id="menu">
+          <div id="start">Start</div>
+          <div id="s-controlType">Controls: LeapMotion</div>
+          <div id="s-quality">Quality: High</div>
+          <div id="s-platform">Platform: Desktop</div>
+          <div id="s-godmode">Godmode: On</div>
+        </div>
+      </div>
+    </div>
+    <div id="step-2" style="display: none">
+      <div id="ctrl-help">Click/Touch to continue.</div>
+    </div>
+    <div id="step-3" style="display: none">
+      <div id="progressbar"></div>
+    </div>
+    <div id="step-4" style="display: none">
+      <div id="overlay"></div>
+      <div id="main"></div>
+    </div>
+    <div id="step-5" style="display: none">
+      <div id="time"></div>
+      <div id="ctrl-help">Click/Touch to continue.</div>
+    </div>
 
+    <div id="leapinfo" style="display: none"></div>
+
+    <script src="libs/leap-0.4.1.min.js"></script>
     <script src="libs/Three.dev.js"></script>
     <script src="libs/ShaderExtras.js"></script>
     <script src="libs/postprocessing/EffectComposer.js"></script>
@@ -66,51 +109,7 @@
 
     <script src="bkcore/hexgl/HexGL.js"></script>
 
-    <script>
-
-      var SCREEN_WIDTH = window.innerWidth;
-      var SCREEN_HEIGHT = window.innerHeight;
-
-      var container, hudcontainer;
-
-      var hexGL;
-
-      function init() {
-        hudcontainer = document.getElementById("overlay");
-        container = document.getElementById("main");
-
-        hexGL = new bkcore.hexgl.HexGL({
-          document: document,
-          width: SCREEN_WIDTH,
-          height: SCREEN_HEIGHT,
-          container: container,
-          overlay: overlay,
-          quality: bkcore.Utils.getURLParameter('quality'),
-          difficulty: bkcore.Utils.getURLParameter('difficulty'),
-          half: bkcore.Utils.getURLParameter('half'),
-          mode: bkcore.Utils.getURLParameter('mode'),
-          track: 'Cityscape'
-        });
-
-        hexGL.load({
-          onLoad: function(){
-            console.log("ALL LOADED.");
-            hexGL.init();
-            hexGL.start();
-          },
-          onError: function(s){
-            console.log("ERROR ON "+s+".");
-          },
-          onProgress: function(p, t, n)
-          {
-            console.log("LOADED "+t+" : "+n+" ( "+p.loaded+" / "+p.total+" ).");
-          }
-        });
-      }
-
-      init();
-
-    </script>
+    <script src="launch.js"></script>
 
   </body>
 </html>
