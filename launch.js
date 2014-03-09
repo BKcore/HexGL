@@ -14,7 +14,7 @@
       height: window.innerHeight,
       container: $('main'),
       overlay: $('overlay'),
-      gameover: $('gameover'),
+      gameover: $('step-5'),
       quality: quality,
       difficulty: 0,
       half: platform === 1 && quality < 1,
@@ -24,6 +24,7 @@
       godmode: godmode,
       track: 'Cityscape'
     });
+    window.hexGL = hexGL;
     progressbar = $('progressbar');
     return hexGL.load({
       onLoad: function() {
@@ -72,6 +73,10 @@
     $('step-2').style.display = 'none';
     $('step-3').style.display = 'block';
     return init(s[0][3], s[1][3], s[2][3], s[3][3]);
+  };
+
+  $('step-5').onclick = function() {
+    return window.location.reload();
   };
 
 }).call(this);

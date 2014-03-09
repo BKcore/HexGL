@@ -7,7 +7,7 @@ init = (controlType, quality, platform, godmode) ->
     height: window.innerHeight
     container: $ 'main'
     overlay: $ 'overlay'
-    gameover: $ 'gameover'
+    gameover: $ 'step-5'
     quality: quality
     difficulty: 0,
     half: (platform is 1 and quality < 1)
@@ -17,6 +17,7 @@ init = (controlType, quality, platform, godmode) ->
     godmode: godmode
     track: 'Cityscape'
   )
+  window.hexGL=hexGL
 
   progressbar = $ 'progressbar'
   hexGL.load(
@@ -53,3 +54,5 @@ $('step-2').onclick = ->
   $('step-2').style.display = 'none'
   $('step-3').style.display = 'block'
   init s[0][3], s[1][3], s[2][3], s[3][3]
+$('step-5').onclick = ->
+  window.location.reload()

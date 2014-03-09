@@ -170,7 +170,7 @@ html, body {
   left: 0;
   background: black;
   vertical-align: bottom;
-  text-align: right;
+  text-align: center;
   padding: 20px;
   color: white;
   font-size: 2em;
@@ -200,4 +200,21 @@ html, body {
   left: 0;
   width: 0%;
   background: white;
+}
+
+#step-5 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: black;
+  text-align: center;
+  padding: 100px 20px;
+  color: white;
+  font-size: 2em;
+}
+
+#step-5 #time {
+  font-size: 4em
 }

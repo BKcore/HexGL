@@ -173,11 +173,11 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 		bkcore.Timer.msToTimeString(l[2])
 	];
 
-	if(this.mobile)
+	if(this.gameover !== null)
 	{
 		this.gameover.style.display = "block";
-		this.gameover.innerHTML = tf.m + "'" + tf.s + "''" + tf.ms;
-		this.containers.main.style.display = "none";
+		this.gameover.children[0].innerHTML = tf.m + "'" + tf.s + "''" + tf.ms;
+		this.containers.main.parentElement.style.display = "none";
 		return;
 	}
 
