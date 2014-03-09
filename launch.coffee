@@ -30,6 +30,7 @@ init = (controlType, quality, platform, godmode) ->
     onError: (s) ->
       console.error "Error loading #{ s }."
     onProgress: (p, t, n) ->
+      console.log("LOADED "+t+" : "+n+" ( "+p.loaded+" / "+p.total+" ).")
       progressbar.style.width = "#{ p.loaded / p.total }%"
   )
 
