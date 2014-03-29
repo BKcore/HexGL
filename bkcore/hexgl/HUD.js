@@ -12,6 +12,9 @@ bkcore.hexgl.HUD = function(opts)
 {
 	var self = this;
 
+	this.visible = true;
+	this.messageOnly = false;
+
 	this.width = opts.width;
 	this.height = opts.height;
 
@@ -124,7 +127,11 @@ bkcore.hexgl.HUD.prototype.update = function(speed, speedRatio, shield, shieldRa
 	var SCREEN_HW = SCREEN_WIDTH / 2;
 	var SCREEN_HH = SCREEN_HEIGHT / 2;
 
-	//this.ctx.clearRect(0 , 0 , SCREEN_WIDTH , SCREEN_HEIGHT);
+	if(!this.visible)
+	{
+		this.ctx.clearRect(0 , 0 , SCREEN_WIDTH , SCREEN_HEIGHT);
+		return;
+	}
 
 	var w = this.bg.width;
 	var h = this.bg.height;
@@ -148,39 +155,42 @@ bkcore.hexgl.HUD.prototype.update = function(speed, speedRatio, shield, shieldRa
 	{
 		this.ctx.clearRect(0 , oh , SCREEN_WIDTH , nh);
 
-	    this.ctx.drawImage(this.bg, o, oh, nw, nh);
+		if(!this.messageOnly)
+		{
+		    this.ctx.drawImage(this.bg, o, oh, nw, nh);
 
-	    this.ctx.save();
-		this.ctx.beginPath();
-		this.ctx.moveTo(bw+ba+SCREEN_HW, oh);
-		this.ctx.lineTo(-(bw+ba)+SCREEN_HW, oh);
-		this.ctx.lineTo(-bw+SCREEN_HW, SCREEN_HEIGHT);
-		this.ctx.lineTo(bw+SCREEN_HW, SCREEN_HEIGHT);
-		this.ctx.lineTo(bw+ba+SCREEN_HW, oh);
-		this.ctx.clip();
-	    this.ctx.drawImage(this.fgspeed, o, oh, nw, nh);
-		this.ctx.restore();
+		    this.ctx.save();
+			this.ctx.beginPath();
+			this.ctx.moveTo(bw+ba+SCREEN_HW, oh);
+			this.ctx.lineTo(-(bw+ba)+SCREEN_HW, oh);
+			this.ctx.lineTo(-bw+SCREEN_HW, SCREEN_HEIGHT);
+			this.ctx.lineTo(bw+SCREEN_HW, SCREEN_HEIGHT);
+			this.ctx.lineTo(bw+ba+SCREEN_HW, oh);
+			this.ctx.clip();
+		    this.ctx.drawImage(this.fgspeed, o, oh, nw, nh);
+			this.ctx.restore();
 
-	    this.ctx.save();
-		this.ctx.beginPath();
-		this.ctx.moveTo(-sw+SCREEN_HW, oh+sy);
-		this.ctx.lineTo(sw+SCREEN_HW, oh+sy);
-		this.ctx.lineTo(sw+SCREEN_HW, oh+sh+sy);
-		this.ctx.lineTo(-sw+SCREEN_HW, oh+sh+sy);
-		this.ctx.lineTo(-sw+SCREEN_HW, oh+sh);
-		this.ctx.clip();
-	    this.ctx.drawImage(this.fgshield, o, oh, nw, nh);
-		this.ctx.restore();
+		    this.ctx.save();
+			this.ctx.beginPath();
+			this.ctx.moveTo(-sw+SCREEN_HW, oh+sy);
+			this.ctx.lineTo(sw+SCREEN_HW, oh+sy);
+			this.ctx.lineTo(sw+SCREEN_HW, oh+sh+sy);
+			this.ctx.lineTo(-sw+SCREEN_HW, oh+sh+sy);
+			this.ctx.lineTo(-sw+SCREEN_HW, oh+sh);
+			this.ctx.clip();
+		    this.ctx.drawImage(this.fgshield, o, oh, nw, nh);
+			this.ctx.restore();
 
-		// SPEED
-		this.ctx.font = (SCREEN_WIDTH/this.speedFontRatio)+"px "+this.font;
-	    this.ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-	    this.ctx.fillText(speed, SCREEN_HW, SCREEN_HEIGHT - nh*0.57);
+			// SPEED
+			this.ctx.font = (SCREEN_WIDTH/this.speedFontRatio)+"px "+this.font;
+		    this.ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+		    this.ctx.fillText(speed, SCREEN_HW, SCREEN_HEIGHT - nh*0.57);
 
-	    // SHIELD
-		this.ctx.font = (SCREEN_WIDTH/this.shieldFontRatio)+"px "+this.font;
-	    this.ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-	    this.ctx.fillText(shield, SCREEN_HW, SCREEN_HEIGHT - nh*0.44);
+		    // SHIELD
+			this.ctx.font = (SCREEN_WIDTH/this.shieldFontRatio)+"px "+this.font;
+		    this.ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+		    this.ctx.fillText(shield, SCREEN_HW, SCREEN_HEIGHT - nh*0.44);
+		}
 	}
 	else if(this.step == 1)
 	{

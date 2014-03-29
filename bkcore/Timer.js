@@ -71,8 +71,6 @@ bkcore.Timer.prototype.update = function()
 
 /*!
  * Returns a formatted version of the current elapsed time using msToTime().
- *
- * 
  */
 bkcore.Timer.prototype.getElapsedTime = function()
 {
