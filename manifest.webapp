@@ -1,0 +1,18 @@
+{
+	"name": "HexGL",
+	"description": "HexGL v1.0.1-ffos",
+	"launch_path": "/index-mobile.html",
+	"icons": {
+		"32": "/icon_32.png",
+		"64": "/icon_64.png",
+		"128": "/icon_128.png",
+		"256": "/icon_256.png"
+	},
+	"developer": {
+		"name": "Thibaut Despoulain (BKcore)",
+		"url": "http://bkcore.com"
+	},
+    "installs_allowed_from": ["*"],
+	"default_locale": "en",
+	"orientation": ["landscape"]
+}
