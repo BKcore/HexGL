@@ -47,13 +47,30 @@ for a in s
     e = $ "s-#{a[0]}"
     (f = -> e.innerHTML = a[4]+a[1][a[3]])()
     e.onclick = -> f(a[3] = (a[3]+1)%a[1].length)
-$('start').onclick = ->
-  $('step-1').style.display = 'none'
-  $('step-2').style.display = 'block'
-  $('step-2').style.backgroundImage = "url(css/help-#{s[0][3]}.png)"
 $('step-2').onclick = ->
   $('step-2').style.display = 'none'
   $('step-3').style.display = 'block'
   init s[0][3], s[1][3], s[2][3], s[3][3]
 $('step-5').onclick = ->
   window.location.reload()
+
+hasWebGL = ->
+  gl = null
+  canvas = document.createElement('canvas');
+  try
+    gl = canvas.getContext("webgl")
+  if not gl?
+    try
+      gl = canvas.getContext("experimental-webgl")
+  return gl?
+
+if not hasWebGL()
+  getWebGL = $('start')
+  getWebGL.innerHTML = 'WebGL is not supported!'
+  getWebGL.onclick = ->
+    window.location.href = 'http://get.webgl.org/'
+else
+  $('start').onclick = ->
+    $('step-1').style.display = 'none'
+    $('step-2').style.display = 'block'
+    $('step-2').style.backgroundImage = "url(css/help-#{s[0][3]}.png)"
