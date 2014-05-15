@@ -155,11 +155,11 @@ bkcore.hexgl.ShipControls = function(ctx)
 	else if(ctx.controlType == 3 && bkcore.controllers.GamepadController.isCompatible())
 	{
 		this.gamepadController = new bkcore.controllers.GamepadController(
-            function(leftStick, restart, pause){
+            function(acceleration, restart){
                 if (restart) 
                     ctx.restart();
                 else
-                    self.key.forward = leftStick < 0;
+                    self.key.forward = acceleration > 0;
             });
 	}
 	else if(ctx.controlType == 2)
@@ -389,8 +389,8 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 		}
 		if(this.gamepadController != null && this.gamepadController.updateAvailable())
 		{
-			angularAmount -= this.gamepadController.rightStick * this.angularSpeed * dt;
-			rollAmount += this.gamepadController.rightStick * this.rollAngle;
+			angularAmount -= this.gamepadController.leftStick * this.angularSpeed * dt;
+			rollAmount += this.gamepadController.leftStick * this.rollAngle;
 		}
 		if(this.leapBridge != null && this.leapBridge.hasHands)
 		{

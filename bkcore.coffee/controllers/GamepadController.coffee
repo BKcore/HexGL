@@ -27,11 +27,9 @@ class GamepadController
 
     # We are only interested in leftStick up/down value and 
     # rightStick left/right value.
-    @leftStick = gamepads[0].axes?[1]
-    @rightStick = gamepads[0].axes?[2]
-    @pause = gamepads[0].buttons?[1]
-    @restart = gamepads[0].buttons?[0]
-    @buttonPressCallback(@leftStick, @restart, @pause)
+    @acceleration = gamepads[0].buttons?[7]
+    @leftStick = gamepads[0].axes?[0]
+    @buttonPressCallback(@acceleration, gamepads[0].buttons?[1])
 
     true
 

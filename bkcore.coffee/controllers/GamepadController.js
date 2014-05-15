@@ -35,7 +35,7 @@
 
 
     GamepadController.prototype.updateAvailable = function() {
-      var gamepads, _ref, _ref1, _ref2, _ref3;
+      var gamepads, _ref, _ref1, _ref2;
       if (!this.active) {
         return false;
       }
@@ -43,11 +43,9 @@
       if (!(gamepads != null ? gamepads[0] : void 0)) {
         return false;
       }
-      this.leftStick = (_ref = gamepads[0].axes) != null ? _ref[1] : void 0;
-      this.rightStick = (_ref1 = gamepads[0].axes) != null ? _ref1[2] : void 0;
-      this.pause = (_ref2 = gamepads[0].buttons) != null ? _ref2[1] : void 0;
-      this.restart = (_ref3 = gamepads[0].buttons) != null ? _ref3[0] : void 0;
-      this.buttonPressCallback(this.leftStick, this.restart, this.pause);
+      this.acceleration = (_ref = gamepads[0].buttons) != null ? _ref[7] : void 0;
+      this.leftStick = (_ref1 = gamepads[0].axes) != null ? _ref1[0] : void 0;
+      this.buttonPressCallback(this.acceleration, (_ref2 = gamepads[0].buttons) != null ? _ref2[1] : void 0);
       return true;
     };
 
