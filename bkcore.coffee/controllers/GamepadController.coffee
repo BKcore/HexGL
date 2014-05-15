@@ -7,12 +7,12 @@
 class GamepadController
 
   @isCompatible: ->
-    return ('gamepadconnected' of window)
+    return ('getGamepads' of navigator) or ('webkitGetGamepads' of navigator)
 
   ###
     Creates a new GamepadController
   ###
-  constructor: ->
+  constructor: (@buttonPressCallback) ->
     @active = true
     @leftStickArray = []
     @rightStickArray = []
@@ -22,17 +22,17 @@ class GamepadController
   ###
   updateAvailable: ->
     return false if not @active
-    gamepads = navigator.getGamepads()
+    gamepads = if navigator.getGamepads then navigator.getGamepads() else navigator.webkitGetGamepads()
     return false if !gamepads?[0]
-
-    # Left stick and Right sticks are button 10 and 11 respectively as per spec. 
-    @leftStickValues = gamepads[0].buttons?[10]
-    @rightStickValues = gamepads[0].buttons?[11]
 
     # We are only interested in leftStick up/down value and 
     # rightStick left/right value.
-    @leftStick = @leftStickValues?[1]
-    @rightStick = @rightStickValues?[1]
+    @leftStick = gamepads[0].axes?[1]
+    @rightStick = gamepads[0].axes?[2]
+    @pause = gamepads[0].buttons?[1]
+    @restart = gamepads[0].buttons?[0]
+    @buttonPressCallback(@leftStick, @restart, @pause)
+
     true
 
 exports = exports ? @
