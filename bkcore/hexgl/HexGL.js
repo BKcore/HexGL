@@ -155,6 +155,7 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 		pixelRatio: this.track.pixelRatio,
 		track: this.track,
 		onFinish: function() {
+			self.components.shipControls.terminate();
 			self.displayScore(this.finishTime, this.lapTimes);
 		}
 	});

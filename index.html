@@ -1,8 +1,17 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>HexGL dev page</title>
+    <title>HexGL by BKcore</title>
     <meta charset="utf-8">
+    <meta name="description" content="HexGL is a futuristic racing game built by Thibaut Despoulain (BKcore) using HTML5, Javascript and WebGL. Come challenge your friends on this fast-paced 3D game!">
+    <meta property="og:title" content="HexGL, the HTML5 futuristic racing game." />
+    <meta property="og:type" content="game" />
+    <meta property="og:url" content="http://hexgl.bkcore.com/" />
+    <meta property="og:image" content="http://hexgl.bkcore.com/image.png" />
+    <meta property="og:site_name" content="HexGL by BKcore" />
+    <meta property="fb:admins" content="1482017639" />
+    <link rel="icon" href="http://hexgl.bkcore.com/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="http://hexgl.bkcore.com/favicon.png" type="image/png">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="css/multi.css" type="text/css" charset="utf-8">
     <link rel="stylesheet" href="css/fonts.css" type="text/css" charset="utf-8">
@@ -20,6 +29,17 @@
         width: 100%;
       }
     </style>
+    <script type="text/javascript">
+    //analytics
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26274524-4']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
   </head>
 
   <body>
@@ -51,6 +71,8 @@
       <div id="time"></div>
       <div id="ctrl-help">Click/Touch to continue.</div>
     </div>
+
+    <div id="leapinfo" style="display: none"></div>
 
     <script src="libs/leap-0.4.1.min.js"></script>
     <script src="libs/Three.dev.js"></script>

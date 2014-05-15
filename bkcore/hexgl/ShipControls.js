@@ -142,7 +142,6 @@ bkcore.hexgl.ShipControls = function(ctx)
 		this.orientationController = new bkcore.controllers.OrientationController(
 			domElement, true,
 			function(state, touch, event){
-				console.log(event.touches.length);
 				if(event.touches.length >= 4)
 					window.location.reload(false);
 				else if(event.touches.length == 3)
@@ -162,22 +161,78 @@ bkcore.hexgl.ShipControls = function(ctx)
 		if(Leap == null)
 			throw new Error("Unable to reach LeapJS!");
 
-		var leapController = {
+		var leapInfo = this.leapInfo = document.getElementById('leapinfo');
+		isServerConnected = false;
+		var lb = this.leapBridge = {
+			isConnected: true,
+			hasHands: false,
 			palmNormal: [0, 0, 0]
 		};
-		this.leapController = leapController;
 
-		Leap.loop(function(obj) {
-			hand = obj.hands[0];
+		function updateInfo()
+		{
+			if(!isServerConnected)
+			{
+				leapInfo.innerHTML = 'Waiting for the Leap Motion Controller server...'
+				leapInfo.style.display = 'block';
+			}
+			else if(lb.isConnected && lb.hasHands)
+			{
+				leapInfo.style.display = 'none';
+			}
+			else if(!lb.isConnected)
+			{
+				leapInfo.innerHTML = 'Please connect your Leap Motion Controller.'
+				leapInfo.style.display = 'block';
+			}
+			else if(!lb.hasHands)
+			{
+				leapInfo.innerHTML = 'Put your hand over the Leap Motion Controller to play.'
+				leapInfo.style.display = 'block';
+			}
+		}
+		updateInfo();
+
+		var lc = this.leapController =  new Leap.Controller({enableGestures: false});
+		lc.on('connect', function()
+		{
+			isServerConnected = true;
+			updateInfo();
+		});
+		lc.on('deviceConnected', function()
+		{
+			lb.isConnected = true;
+			updateInfo();
+		});
+		lc.on('deviceDisconnected', function()
+		{
+			lb.isConnected = false;
+			updateInfo();
+		});
+		lc.on('frame', function(frame)
+		{
+			if(!lb.isConnected) return;
+		  hand = frame.hands[0];
 			if(typeof hand === 'undefined')
 			{
-				leapController.palmNormal = [0, 0, 0];
+				if(lb.hasHands)
+				{
+					lb.hasHands = false;
+					updateInfo();
+				}
+				lb.palmNormal = [0, 0, 0];
 			}
 			else
 			{
-				leapController.palmNormal = hand.palmNormal;
+				if(!lb.hasHands)
+				{
+					lb.hasHands = true;
+					updateInfo();
+				}
+				lb.palmNormal = hand.palmNormal;
 			}
 		});
+		lc.connect();
 	}
 
 	function onKeyDown(event)
@@ -257,6 +312,17 @@ bkcore.hexgl.ShipControls.prototype.reset = function(position, rotation)
 	this.mesh.applyMatrix(this.dummy.matrix);
 }
 
+bkcore.hexgl.ShipControls.prototype.terminate = function()
+{
+	this.destroy();
+
+	if(this.leapController != null)
+	{
+		this.leapController.disconnect();
+		this.leapInfo.style.display = 'none';
+	}
+}
+
 bkcore.hexgl.ShipControls.prototype.destroy = function()
 {
 	this.active = false;
@@ -265,7 +331,6 @@ bkcore.hexgl.ShipControls.prototype.destroy = function()
 	this.collision.left = false;
 	this.collision.right = false;
 }
-
 
 bkcore.hexgl.ShipControls.prototype.fall = function()
 {
@@ -297,10 +362,10 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 	var angularAmount = 0.0;
 	var yawLeap = 0.0;
 
-	if(this.leapController != null)
+	if(this.leapBridge != null && this.leapBridge.hasHands)
 	{
-		rollAmount -= this.leapController.palmNormal[0] * 3.5 * this.rollAngle;
-		yawLeap = -this.leapController.palmNormal[2] * 0.6;
+		rollAmount -= this.leapBridge.palmNormal[0] * 3.5 * this.rollAngle;
+		yawLeap = -this.leapBridge.palmNormal[2] * 0.6;
 	}
 
 	if(this.active)
@@ -322,10 +387,10 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 			rollAmount -= this.gamepadController.rightStick * this.rollAngle;
 			self.key.forward = this.gamepadController.leftStick > 0;
 		}
-		if(this.leapController != null)
+		if(this.leapBridge != null && this.leapBridge.hasHands)
 		{
-			angularAmount += this.leapController.palmNormal[0] * 2 * this.angularSpeed * dt;
-			this.speed += Math.max(0.0, (0.5 + this.leapController.palmNormal[2])) * 3 * this.thrust * dt;
+			angularAmount += this.leapBridge.palmNormal[0] * 2 * this.angularSpeed * dt;
+			this.speed += Math.max(0.0, (0.5 + this.leapBridge.palmNormal[2])) * 3 * this.thrust * dt;
 		}
 
 		if(this.key.forward)

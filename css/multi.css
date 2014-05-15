@@ -176,11 +176,11 @@ html, body {
   font-size: 2em;
   background-repeat: no-repeat;
   background-position: center center;
-  -moz-background-size: auto 50%;
-  -webkit-background-size: auto 50%;
-  -ms-background-size: auto 50%;
-  -o-background-size: auto 50%;
-  background-size: auto 70%;
+  -moz-background-size: 60% auto;
+  -webkit-background-size: 60% auto;
+  -ms-background-size: 60% auto;
+  -o-background-size: 60% auto;
+  background-size: 60% auto;
 }
 
 #step-3 {
@@ -217,4 +217,18 @@ html, body {
 
 #step-5 #time {
   font-size: 4em
+}
+
+#leapinfo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  text-align: center;
+  font-size: 3em;
+  padding-top: 200px;
+  z-index: 999999;
 }
