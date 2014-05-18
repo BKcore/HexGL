@@ -120,6 +120,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 
 	this.touchController = null;
 	this.orientationController = null;
+	this.gamepadController = null
 
 	if(ctx.controlType == 1 && bkcore.controllers.TouchController.isCompatible())
 	{
@@ -136,7 +137,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 					self.key.forward = true;
 			});
 	}
-	else if(ctx.controlType == 3 && bkcore.controllers.OrientationController.isCompatible())
+	else if(ctx.controlType == 4 && bkcore.controllers.OrientationController.isCompatible())
 	{
 		this.orientationController = new bkcore.controllers.OrientationController(
 			domElement, true,
@@ -150,6 +151,16 @@ bkcore.hexgl.ShipControls = function(ctx)
 				else
 					self.key.forward = true;
 			});
+	}
+	else if(ctx.controlType == 3 && bkcore.controllers.GamepadController.isCompatible())
+	{
+		this.gamepadController = new bkcore.controllers.GamepadController(
+            function(acceleration, restart){
+                if (restart) 
+                    ctx.restart();
+                else
+                    self.key.forward = acceleration > 0;
+            });
 	}
 	else if(ctx.controlType == 2)
 	{
@@ -375,6 +386,11 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 		{
 			angularAmount += this.orientationController.beta/45 * this.angularSpeed * dt;
 			rollAmount -= this.orientationController.beta/45 * this.rollAngle;
+		}
+		if(this.gamepadController != null && this.gamepadController.updateAvailable())
+		{
+			angularAmount -= this.gamepadController.leftStick * this.angularSpeed * dt;
+			rollAmount += this.gamepadController.leftStick * this.rollAngle;
 		}
 		if(this.leapBridge != null && this.leapBridge.hasHands)
 		{
