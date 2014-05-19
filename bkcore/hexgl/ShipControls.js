@@ -120,6 +120,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 
 	this.touchController = null;
 	this.orientationController = null;
+	this.gamepadController = null
 
 	if(ctx.controlType == 1 && bkcore.controllers.TouchController.isCompatible())
 	{
@@ -136,7 +137,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 					self.key.forward = true;
 			});
 	}
-	else if(ctx.controlType == 3 && bkcore.controllers.OrientationController.isCompatible())
+	else if(ctx.controlType == 4 && bkcore.controllers.OrientationController.isCompatible())
 	{
 		this.orientationController = new bkcore.controllers.OrientationController(
 			domElement, true,
@@ -150,6 +151,20 @@ bkcore.hexgl.ShipControls = function(ctx)
 				else
 					self.key.forward = true;
 			});
+	}
+	else if(ctx.controlType == 3 && bkcore.controllers.GamepadController.isCompatible())
+	{
+		this.gamepadController = new bkcore.controllers.GamepadController(
+      function(controller){
+        if (controller.select)
+          ctx.restart();
+        else
+          self.key.forward = controller.acceleration > 0;
+          self.key.ltrigger = controller.ltrigger > 0;
+          self.key.rtrigger = controller.rtrigger > 0;
+          self.key.left = controller.lstickx < -0.1;
+          self.key.right = controller.lstickx > 0.1;
+      });
 	}
 	else if(ctx.controlType == 2)
 	{
@@ -376,26 +391,34 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 			angularAmount += this.orientationController.beta/45 * this.angularSpeed * dt;
 			rollAmount -= this.orientationController.beta/45 * this.rollAngle;
 		}
+		if(this.gamepadController != null && this.gamepadController.updateAvailable())
+		{
+			angularAmount -= this.gamepadController.lstickx * 0.2 * this.angularSpeed * dt;
+			rollAmount += this.gamepadController.lstickx * this.rollAngle;
+		}
 		if(this.leapBridge != null && this.leapBridge.hasHands)
 		{
 			angularAmount += this.leapBridge.palmNormal[0] * 2 * this.angularSpeed * dt;
 			this.speed += Math.max(0.0, (0.5 + this.leapBridge.palmNormal[2])) * 3 * this.thrust * dt;
+		}
+		else
+		{
+			if(this.key.left)
+			{
+				angularAmount += this.angularSpeed * dt;
+				rollAmount -= this.rollAngle;
+			}
+			if(this.key.right)
+			{
+				angularAmount -= this.angularSpeed * dt;
+				rollAmount += this.rollAngle;
+			}
 		}
 
 		if(this.key.forward)
 			this.speed += this.thrust * dt;
 		else
 			this.speed -= this.airResist * dt;
-		if(this.key.left)
-		{
-			angularAmount += this.angularSpeed * dt;
-			rollAmount -= this.rollAngle;
-		}
-		if(this.key.right)
-		{
-			angularAmount -= this.angularSpeed * dt;
-			rollAmount += this.rollAngle;
-		}
 		if(this.key.ltrigger)
 		{
 			if(this.key.left)
