@@ -386,17 +386,17 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 			angularAmount -= this.touchController.stickVector.x/100 * this.angularSpeed * dt;
 			rollAmount += this.touchController.stickVector.x/100 * this.rollAngle;
 		}
-		if(this.orientationController != null)
+		else if(this.orientationController != null)
 		{
 			angularAmount += this.orientationController.beta/45 * this.angularSpeed * dt;
 			rollAmount -= this.orientationController.beta/45 * this.rollAngle;
 		}
-		if(this.gamepadController != null && this.gamepadController.updateAvailable())
+		else if(this.gamepadController != null && this.gamepadController.updateAvailable())
 		{
-			angularAmount -= this.gamepadController.lstickx * 0.2 * this.angularSpeed * dt;
+			angularAmount -= this.gamepadController.lstickx * this.angularSpeed * dt;
 			rollAmount += this.gamepadController.lstickx * this.rollAngle;
 		}
-		if(this.leapBridge != null && this.leapBridge.hasHands)
+		else if(this.leapBridge != null && this.leapBridge.hasHands)
 		{
 			angularAmount += this.leapBridge.palmNormal[0] * 2 * this.angularSpeed * dt;
 			this.speed += Math.max(0.0, (0.5 + this.leapBridge.palmNormal[2])) * 3 * this.thrust * dt;

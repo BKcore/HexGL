@@ -26,11 +26,16 @@ class GamepadController
     return false if not gamepads?[0]
     gp = gamepads[0]
     return if not gp.buttons? or not gp.axes?
-    @acceleration = gp.buttons[0]
     @lstickx = gp.axes[0]
-    @ltrigger = gp.buttons[6]
-    @rtrigger = gp.buttons[7]
-    @select = gp.buttons[8]
+    accel = gp.buttons[0]
+    lt = gp.buttons[6]
+    rt = gp.buttons[7]
+    sel = gp.buttons[8]
+    # API fallback
+    @acceleration = accel.pressed ? accel
+    @ltrigger = lt.pressed ? lt
+    @rtrigger = rt.pressed ? rt
+    @select = sel.pressed ? sel
     @buttonPressCallback this
     true
 
