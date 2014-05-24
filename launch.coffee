@@ -36,7 +36,7 @@ init = (controlType, quality, platform, godmode) ->
 
 u = bkcore.Utils.getURLParameter
 s = [
-  ['controlType', ['KEYBOARD', 'TOUCH', 'LEAP MOTION CONTROLLER'], 0, 0, 'Controls: ']
+  ['controlType', ['KEYBOARD', 'TOUCH', 'LEAP MOTION CONTROLLER', 'GAMEPAD'], 0, 0, 'Controls: ']
   ['quality', ['LOW', 'MID', 'HIGH'], 2, 2, 'Quality: ']
   ['platform', ['DESKTOP', 'MOBILE'], 0, 0, 'Platform: ']
   ['godmode', ['OFF', 'ON'], 0, 1, 'Godmode: ']
