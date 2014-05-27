@@ -364,9 +364,6 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 	//Update listener position
 	bkcore.Audio.setListenerPos(this.movement);
 	bkcore.Audio.setListenerVelocity(this.currentVelocity);
-	//change wind volume
-	bkcore.Audio.volume('wind',Math.max(this.speedRatio,0.05));
-	bkcore.Audio.volume('bg',1-this.speedRatio/2);
 };
 
 bkcore.hexgl.ShipControls.prototype.boosterCheck = function(dt)

@@ -21,8 +21,6 @@ bkcore.NONE = undefined;
  */
 bkcore.threejs.Loader = function(opts)
 {
-	var self = this;
-
 	this.jsonLoader = new THREE.JSONLoader();
 
 	this.errorCallback = opts.onError == undefined ? function(s){ console.warn("Error while loading %s.".replace("%s", s)) } : opts.onError;
@@ -53,7 +51,7 @@ bkcore.threejs.Loader = function(opts)
 		loaded: 0,
 		finished: false
 	};
-}
+};
 
 /**
  * Load the given list of resources
@@ -61,8 +59,6 @@ bkcore.threejs.Loader = function(opts)
  */
 bkcore.threejs.Loader.prototype.load = function(data)
 {
-	var self = this;
-
 	for(var k in this.types)
 	{
 		if(k in data)
@@ -89,9 +85,12 @@ bkcore.threejs.Loader.prototype.load = function(data)
 
 	for(var i in data.images)
 		this.loadImage(i, data.images[i]);
+    
+    for(var s in data.sounds)
+        this.loadSound(data.sounds[s].src,s,data.sounds[s].loop);
 
 	this.progressCallback.call(this, this.progress);
-}
+};
 
 bkcore.threejs.Loader.prototype.updateState = function(type, name, state)
 {
@@ -115,7 +114,7 @@ bkcore.threejs.Loader.prototype.updateState = function(type, name, state)
 	{
 		this.loadCallback.call(this);
 	}
-}
+};
 
 /**
  * Get loaded resource
@@ -137,7 +136,7 @@ bkcore.threejs.Loader.prototype.get = function(type, name)
 	}
 
 	return this.data[type][name];
-}
+};
 
 bkcore.threejs.Loader.prototype.loaded = function(type, name)
 {
@@ -153,7 +152,7 @@ bkcore.threejs.Loader.prototype.loaded = function(type, name)
 	}
 
 	return this.states[type][name];
-}
+};
 
 bkcore.threejs.Loader.prototype.loadTexture = function(name, url)
 {
@@ -169,7 +168,7 @@ bkcore.threejs.Loader.prototype.loadTexture = function(name, url)
 			self.errorCallback.call(self, name); 
 		}
 	);
-}
+};
 
 bkcore.threejs.Loader.prototype.loadTextureCube = function(name, url)
 {
@@ -189,7 +188,7 @@ bkcore.threejs.Loader.prototype.loadTextureCube = function(name, url)
 			self.updateState("texturesCube", name, true); 
 		} 
 	);
-}
+};
 
 bkcore.threejs.Loader.prototype.loadGeometry = function(name, url)
 {
@@ -203,7 +202,7 @@ bkcore.threejs.Loader.prototype.loadGeometry = function(name, url)
 			self.updateState("geometries", name, true); 
 		}
 	);
-}
+};
 
 bkcore.threejs.Loader.prototype.loadAnalyser = function(name, url)
 {
@@ -215,7 +214,7 @@ bkcore.threejs.Loader.prototype.loadAnalyser = function(name, url)
 			self.updateState("analysers", name, true);
 		}
 	);
-}
+};
 
 bkcore.threejs.Loader.prototype.loadImage = function(name, url)
 {
@@ -228,4 +227,23 @@ bkcore.threejs.Loader.prototype.loadImage = function(name, url)
 	e.crossOrigin = "anonymous";
 	e.src = url;
 	this.data.images[name] = e;
-}
+};
+
+bkcore.threejs.Loader.prototype.loadSound = function(src,name,loop){
+    var self = this;
+    this.updateState("sounds", name, false);
+    bkcore.Audio.addSound(src,name,loop,function(){
+        self.updateState("sounds",name,true);
+    });
+    this.data.sounds[name] = {
+        play:function(){
+            bkcore.Audio.play(name);
+        },
+        stop:function(){
+            bkcore.Audio.stop(name);
+        },
+        volume:function(vol){
+            bkcore.Audio.volume(name,vol);
+        }
+    };
+};

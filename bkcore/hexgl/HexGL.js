@@ -8,6 +8,17 @@
 'use strict';
 'v1.0.1';
 
+if(!(window.console && console.log)){
+    window.console.log = function(){
+        var args = arguments;
+        var str;
+        for(var i = 0; i < args.length; i++){
+            str += args[i];
+        }
+        window.alert(str);
+    };
+}
+
 var bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
@@ -21,16 +32,16 @@ bkcore.hexgl.HexGL = function(opts)
 
 	this.active = true;
 
-	this.width = opts.width == undefined ? window.innerWidth : opts.width;
-	this.height = opts.height == undefined ? window.innerHeight : opts.height;
+	this.width = opts.width === undefined ? window.innerWidth : opts.width;
+	this.height = opts.height === undefined ? window.innerHeight : opts.height;
 
-	this.quality = opts.quality == undefined ? 2 : opts.quality;
-	this.difficulty = opts.difficulty == undefined ? 0 : opts.difficulty;
-	this.player = opts.player == undefined ? "Anonym" : opts.player;
+	this.quality = opts.quality === undefined ? 2 : opts.quality;
+	this.difficulty = opts.difficulty === undefined ? 0 : opts.difficulty;
+	this.player = opts.player === undefined ? "Anonym" : opts.player;
 
-	this.half = opts.half == undefined ? false : opts.half;
+	this.half = opts.half === undefined ? false : opts.half;
 
-	this.track = bkcore.hexgl.tracks[ opts.track == undefined ? 'Cityscape' : opts.track ];
+	this.track = bkcore.hexgl.tracks[ opts.track === undefined ? 'Cityscape' : opts.track ];
 
 	if(this.half)
 	{
@@ -51,8 +62,8 @@ bkcore.hexgl.HexGL = function(opts)
 	};
 
 	this.containers = {};
-	this.containers.main = opts.container == undefined ? document.body : opts.container;
-	this.containers.overlay = opts.overlay == undefined ? document.body : opts.overlay;
+	this.containers.main = opts.container === undefined ? document.body : opts.container;
+	this.containers.overlay = opts.overlay === undefined ? document.body : opts.overlay;
 
 	this.hud = null;
 
@@ -73,7 +84,7 @@ bkcore.hexgl.HexGL = function(opts)
 	}
 
 	this.document.addEventListener('keydown', onKeyPress, false);
-}
+};
 
 bkcore.hexgl.HexGL.prototype.start = function()
 {
@@ -92,7 +103,7 @@ bkcore.hexgl.HexGL.prototype.start = function()
 		raf();
 
 	this.initGameplay();
-}
+};
 
 bkcore.hexgl.HexGL.prototype.reset = function()
 {
@@ -105,23 +116,28 @@ bkcore.hexgl.HexGL.prototype.reset = function()
 	//bkcore.Audio.setListenerPos(new THREE.Vector3(0,0,0));
 	
 	this.gameplay.start();
-}
+};
 
 bkcore.hexgl.HexGL.prototype.restart = function()
 {
 	this.document.getElementById('finish').style.display = 'none';
 	this.reset();
-}
+};
+
+bkcore.hexgl.HexGL.prototype.resize = function(w,h){
+    this.renderer.setSize(w,h);
+    this.hud.setSize(w,h);
+};
 
 bkcore.hexgl.HexGL.prototype.update = function()
 {
 	if(!this.active) return;
 
-	if(this.gameplay != null)
+	if(this.gameplay !== null)
 		this.gameplay.update();
 
 	this.manager.renderCurrent();
-}
+};
 
 bkcore.hexgl.HexGL.prototype.init = function()
 {
@@ -132,20 +148,12 @@ bkcore.hexgl.HexGL.prototype.init = function()
 	this.track.buildScenes(this, this.quality);
 
 	this.initGameComposer();
-}
+};
 
 bkcore.hexgl.HexGL.prototype.load = function(opts)
 {
 	this.track.load(opts, this.quality);
-	
-	for(var i in bkcore.AudioList){
-		bkcore.Audio.addSound(bkcore.AudioList[i].src,i,bkcore.AudioList[i].loop,(function(i){
-			return function(){
-				console.log('Audio '+i+' LOADED.');
-			};
-		})(i));
-	}
-}
+};
 
 bkcore.hexgl.HexGL.prototype.initGameplay = function()
 {
@@ -173,7 +181,7 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 	//bkcore.Audio.setListenerPos(new THREE.Vector3(0,0,0));
 
 	this.gameplay.start();
-}
+};
 
 bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 {
@@ -186,11 +194,11 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 	var dl1 = this.document.getElementById("finish-lap1");
 	var dl2 = this.document.getElementById("finish-lap2");
 	var dl3 = this.document.getElementById("finish-lap3");
-	var dd = this.document.getElementById("finish-diff")
+	var dd = this.document.getElementById("finish-diff");
 	var st = this.document.getElementById("finish-twitter");
 	var sf = this.document.getElementById("finish-fb");
 	var sl = this.document.getElementById("lowfps-msg");
-	var d = this.difficulty == 0 ? 'casual' : 'hard';
+	var d = this.difficulty === 0 ? 'casual' : 'hard';
 	var ts = this.hud.timeSeparators;
 	var tf = bkcore.Timer.msToTimeString(f);
 	var tl = [
@@ -201,7 +209,7 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 
 	if(this.gameplay.result == this.gameplay.results.FINISH)
 	{
-		ds != undefined && (ds.innerHTML = "Finished!");
+		ds !== undefined && (ds.innerHTML = "Finished!");
 		// local record
 		if(typeof(Storage)!=="undefined")
 		{
@@ -215,6 +223,7 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 				dr != undefined && (dr.innerHTML = "Well done!");
 			}
 		}
+        /*
 		// ladder record
 		var p = bkcore.hexgl.Ladder.global[t][d][bkcore.hexgl.Ladder.global[t][d].length-2];
 		if(p != undefined && p['score'] > f)
@@ -225,11 +234,12 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 		{
 			dh != undefined && (dh.innerHTML = "Hall Of Fame");
 		}
+        */
 
-		dt != undefined && (dt.innerHTML = tf.m + ts[1] + tf.s + ts[2] + tf.ms);
-		dl1 != undefined && (dl1.innerHTML = tl[0]["m"] != undefined ? tl[0].m + ts[1] + tl[0].s + ts[2] + tl[0].ms : "-");
-		dl2 != undefined && (dl2.innerHTML = tl[1]["m"] != undefined ? tl[1].m + ts[1] + tl[1].s + ts[2] + tl[1].ms : "-");
-		dl3 != undefined && (dl3.innerHTML = tl[2]["m"] != undefined ? tl[2].m + ts[1] + tl[2].s + ts[2] + tl[2].ms : "-");
+		dt !== undefined && (dt.innerHTML = tf.m + ts[1] + tf.s + ts[2] + tf.ms);
+		dl1 !== undefined && (dl1.innerHTML = tl[0].m !== undefined ? tl[0].m + ts[1] + tl[0].s + ts[2] + tl[0].ms : "-");
+		dl2 !== undefined && (dl2.innerHTML = tl[1].m !== undefined ? tl[1].m + ts[1] + tl[1].s + ts[2] + tl[1].ms : "-");
+		dl3 !== undefined && (dl3.innerHTML = tl[2].m !== undefined ? tl[2].m + ts[1] + tl[2].s + ts[2] + tl[2].ms : "-");
 
 		// Ladder save
 		// Undisclosed
@@ -253,7 +263,7 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 		+'&p[url]='+encodeURIComponent('http://hexgl.bkcore.com')
 		+'&p[images][0]='+encodeURIComponent('http://hexgl.bkcore.com/image.png'));
 
-	bkcore.hexgl.Ladder.displayLadder('finish-ladder', t, d, 8);
+	//bkcore.hexgl.Ladder.displayLadder('finish-ladder', t, d, 8);
 
 	if(this.manager.get('game').objects.lowFPS >= 999)
 		sl != undefined && (sl.innerHTML = 'Note: Your framerate was pretty low, you should try a lesser graphic setting!');
@@ -261,7 +271,7 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 		sl != undefined && (sl.innerHTML = '');
 
 	dc.style.display = 'block';
-}
+};
 
 bkcore.hexgl.HexGL.prototype.initRenderer = function()
 {
@@ -285,7 +295,7 @@ bkcore.hexgl.HexGL.prototype.initRenderer = function()
 	this.containers.main.appendChild( renderer.domElement );	
 	this.renderer = renderer;
 	this.manager = new bkcore.threejs.RenderManager(renderer);
-}
+};
 
 bkcore.hexgl.HexGL.prototype.initHUD = function()
 {
@@ -298,7 +308,7 @@ bkcore.hexgl.HexGL.prototype.initHUD = function()
 		shield: this.track.lib.get("images", "hud.shield")
 	});	
 	this.containers.overlay.appendChild(this.hud.canvas);
-}
+};
 
 bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 {
@@ -349,7 +359,7 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 	this.composers.game.addPass( effectHex );
 
 	
-}
+};
 
 bkcore.hexgl.HexGL.prototype.createMesh = function(parent, geometry, x, y, z, mat) 
 {
@@ -366,7 +376,7 @@ bkcore.hexgl.HexGL.prototype.createMesh = function(parent, geometry, x, y, z, ma
 	}
 
 	return mesh;
-}
+};
 
 bkcore.hexgl.HexGL.prototype.tweakShipControls = function()
 {
@@ -409,4 +419,4 @@ bkcore.hexgl.HexGL.prototype.tweakShipControls = function()
 		c.driftLerp = 0.3;
 		c.angularLerp = 0.4;
 	}
-}
+};

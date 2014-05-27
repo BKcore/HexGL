@@ -76,7 +76,29 @@ bkcore.hexgl.tracks.Cityscape = {
 					'hud.bg'							: "textures/hud/hud-bg.png",
 					'hud.speed'							: "textures/hud/hud-fg-speed.png",
 					'hud.shield'						: "textures/hud/hud-fg-shield.png"
-				}
+				},
+                sounds:{
+                    bg: {
+                        src: 'audio/bg.mp3',
+                        loop: true
+                    },
+                    crash: {
+                        src: 'audio/crash.mp3',
+                        loop: false
+                    },
+                    destroyed: {
+                        src: 'audio/destroyed.mp3',
+                        loop: false
+                    },
+                    boost: {
+                        src: 'audio/boost.mp3',
+                        loop: false
+                    },
+                    wind: {
+                        src: 'audio/wind.mp3',
+                        loop: true
+                    }
+                }
 			});
 		}
 		else // HIGH
@@ -130,7 +152,29 @@ bkcore.hexgl.tracks.Cityscape = {
 					'hud.bg'							: "textures/hud/hud-bg.png",
 					'hud.speed'							: "textures/hud/hud-fg-speed.png",
 					'hud.shield'						: "textures/hud/hud-fg-shield.png"
-				}
+				},
+                sounds:{
+                    bg: {
+                        src: 'audio/bg.mp3',
+                        loop: true
+                    },
+                    crash: {
+                        src: 'audio/crash.mp3',
+                        loop: false
+                    },
+                    destroyed: {
+                        src: 'audio/destroyed.mp3',
+                        loop: false
+                    },
+                    boost: {
+                        src: 'audio/boost.mp3',
+                        loop: false
+                    },
+                    wind: {
+                        src: 'audio/wind.mp3',
+                        loop: true
+                    }
+                }
 			});
 		}
 	},
