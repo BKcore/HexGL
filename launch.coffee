@@ -1,6 +1,6 @@
 $ = (_) -> document.getElementById _
 
-init = (controlType, quality, platform, godmode) ->
+init = (controlType, quality, hud, godmode) ->
   hexGL = new bkcore.hexgl.HexGL(
     document: document
     width: window.innerWidth
@@ -9,10 +9,8 @@ init = (controlType, quality, platform, godmode) ->
     overlay: $ 'overlay'
     gameover: $ 'step-5'
     quality: quality
-    difficulty: 0,
-    half: (platform is 1 and quality < 1)
-    mobile: platform is 1
-    hud: platform is 0
+    difficulty: 0
+    hud: hud is 1
     controlType: controlType
     godmode: godmode
     track: 'Cityscape'
@@ -38,9 +36,10 @@ u = bkcore.Utils.getURLParameter
 s = [
   ['controlType', ['KEYBOARD', 'TOUCH', 'LEAP MOTION CONTROLLER', 'GAMEPAD'], 0, 0, 'Controls: ']
   ['quality', ['LOW', 'MID', 'HIGH'], 2, 2, 'Quality: ']
-  ['platform', ['DESKTOP', 'MOBILE'], 0, 0, 'Platform: ']
+  ['hud', ['OFF', 'ON'], 1, 1, 'HUD: ']
   ['godmode', ['OFF', 'ON'], 0, 1, 'Godmode: ']
 ]
+
 for a in s
   do(a)->
     a[3] = u(a[0]) ? a[2]
