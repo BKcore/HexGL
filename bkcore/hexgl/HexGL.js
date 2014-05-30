@@ -23,12 +23,6 @@ bkcore.hexgl.HexGL = function(opts)
 	this.displayHUD = opts.hud == undefined ? true : opts.hud;
 	this.width = opts.width == undefined ? window.innerWidth : opts.width;
 	this.height = opts.height == undefined ? window.innerHeight : opts.height;
-
-	this.quality = opts.quality == undefined ? 2 : opts.quality;
-	
-	// TODO remove mobile variable
-	var mobile = true;
-	this.half = mobile && this.quality < 1;
 	
 	this.difficulty = opts.difficulty == undefined ? 0 : opts.difficulty;
 	this.player = opts.player == undefined ? "Anonym" : opts.player;
@@ -38,8 +32,17 @@ bkcore.hexgl.HexGL = function(opts)
 	this.mode = opts.mode == undefined ? 'timeattack' : opts.mode;
 
 	this.controlType = opts.controlType == undefined ? 1 : opts.controlType;
+	
+	// 0 == low, 1 == mid, 2 == high, 3 == very high
+	// the old platform+quality combinations map to these new quality values
+	// as follows:
+	// mobile + low quality => 0 (LOW)
+	// mobile + mid quality OR desktop + low quality => 1 (MID)
+	// mobile + high quality => 2 (HIGH)
+	// desktop + mid or high quality => 3 (VERY HIGH)
+	this.quality = opts.quality == undefined ? 3 : opts.quality;
 
-	if(this.half)
+	if(this.quality === 0)
 	{
 		this.width /= 2;
 		this.height /=2;
@@ -274,11 +277,8 @@ bkcore.hexgl.HexGL.prototype.initRenderer = function()
 		clearColor: 0x000000
 	});
 
-	// TODO remove mobile var
-	var mobile = true;
-	
 	// desktop + quality mid or high
-	if(this.quality > 0 && !mobile)
+	if(this.quality > 2)
 	{
 		renderer.physicallyBasedShading = true;
 		renderer.gammaInput = true;
@@ -352,11 +352,8 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 	
 	// }
 	
-	// TODO remove mobile var
-	var mobile = true;
-	
 	// desktop + quality mid or high
-	if(this.quality > 1 && !mobile)
+	if(this.quality > 2)
 	{
 		var effectBloom = new THREE.BloomPass( 0.8, 25, 4 , 256);
 
@@ -365,16 +362,13 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 		this.extras.bloom = effectBloom;
 	}
 
-	// TODO remove mobile var
 	// desktop + quality low, mid or high
 	// OR
 	// mobile + quality mid or high
-	if(!mobile || this.quality > 0)
+	if(this.quality > 0)
 		this.composers.game.addPass( effectHex );
 	else
 		this.composers.game.addPass( effectScreen );
-
-
 }
 
 bkcore.hexgl.HexGL.prototype.createMesh = function(parent, geometry, x, y, z, mat)
@@ -385,11 +379,8 @@ bkcore.hexgl.HexGL.prototype.createMesh = function(parent, geometry, x, y, z, ma
 	mesh.position.set( x, y, z );
 	parent.add(mesh);
 
-	// TODO remove mobile var
-	var mobile = true;
-	
 	// desktop + quality mid or high
-	if(this.quality > 0 && !mobile)
+	if(this.quality > 2)
 	{
 		mesh.castShadow = true;
 		mesh.receiveShadow = true;
