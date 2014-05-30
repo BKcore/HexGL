@@ -131,10 +131,13 @@ bkcore.hexgl.ShipControls = function(ctx)
 					window.location.reload(false);
 				else if(event.touches.length == 3)
 					ctx.restart();
-				else if(event.touches.length <= 1)
-					self.key.forward = false;
-				else
-					self.key.forward = true;
+				// touch was on the right-hand side of the screen
+				else if (touch.clientX > (ctx.width / 2)) {
+					if (event.type === 'touchend')
+						self.key.forward = false;
+					else
+						self.key.forward = true;
+				}
 			});
 	}
 	else if(ctx.controlType == 4 && bkcore.controllers.OrientationController.isCompatible())

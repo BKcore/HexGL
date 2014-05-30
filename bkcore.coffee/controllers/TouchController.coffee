@@ -53,7 +53,7 @@ class TouchController
     event.preventDefault()
     return if not @active
     for touch in event.changedTouches
-      if @stickID is touch.identifier
+      if @stickID is touch.identifier and touch.clientX < @stickMargin
         @stickPos.set(touch.clientX, touch.clientY)
         @stickVector.copy(@stickPos).substract(@stickStartPos)
         break
