@@ -37,11 +37,14 @@ bkcore.hexgl.tracks.Cityscape = {
 	analyser: null,
 	pixelRatio: 2048.0 / 6000.0,
 
-	load: function(opts, quality, mobile)
+	load: function(opts, quality)
 	{
 		this.lib = new bkcore.threejs.Loader(opts);
 
-		if((quality < 1 && !mobile) || quality < 2) // LOW
+		// desktop + quality low
+		// OR
+		// mobile + quality low or mid
+		if(quality < 2) // LOW
 		{
 			this.lib.load({
 				textures: {
@@ -83,6 +86,9 @@ bkcore.hexgl.tracks.Cityscape = {
 				}
 			});
 		}
+		// desktop + quality mid or high
+		// OR
+		// mobile + quality high
 		else // HIGH
 		{console.log('HIGH');
 			this.lib.load({
@@ -139,9 +145,12 @@ bkcore.hexgl.tracks.Cityscape = {
 		}
 	},
 
-	buildMaterials: function(quality, mobile)
+	buildMaterials: function(quality)
 	{
-		if((quality < 1 && !mobile) || quality < 2) // LOW
+		// desktop + quality low
+		// OR
+		// mobile + quality low or mid
+		if(quality < 2) // LOW
 		{
 			this.materials.track = new THREE.MeshBasicMaterial({
 				map: this.lib.get("textures", "track.cityscape.diffuse"),
@@ -187,6 +196,9 @@ bkcore.hexgl.tracks.Cityscape = {
 				transparent: false
 			});
 		}
+		// desktop + quality mid or high
+		// OR
+		// mobile + quality high
 		else // HIGH
 		{
 			this.materials.track = bkcore.Utils.createNormalMaterial({
@@ -270,7 +282,7 @@ bkcore.hexgl.tracks.Cityscape = {
 		}
 	},
 
-	buildScenes: function(ctx, quality, mobile)
+	buildScenes: function(ctx, quality)
 	{
 		// IMPORTANT
 		this.analyser = this.lib.get("analysers", "track.cityscape.collision");
@@ -313,7 +325,8 @@ bkcore.hexgl.tracks.Cityscape = {
 		sun.position.set( -4000, 1200, 1800 );
 		sun.lookAt(new THREE.Vector3());
 
-		if(quality > 0 && !mobile)
+		// desktop + quality mid or high
+		if(quality > 2)
 		{
 			sun.castShadow = true;
 			sun.shadowCameraNear = 50;
@@ -348,6 +361,14 @@ bkcore.hexgl.tracks.Cityscape = {
 
 		var boosterLight = new THREE.PointLight(0x00a2ff, 4.0, 60);
 		boosterLight.position.set(0, 0.665, -4);
+		
+		// desktop + quality low, mid or high
+		// OR
+		// mobile + quality mid or high
+		// NB booster is now enabled on desktop + low quality,
+		// when it wasn't before; this is because this booster setting
+		// is the only difference between mobile + mid quality
+		// and desktop + low quality, so I merged them for convenience
 		if(quality > 0)
 			ship.add(boosterLight);
 
@@ -373,7 +394,9 @@ bkcore.hexgl.tracks.Cityscape = {
 			boosterLight: boosterLight,
 			useParticles: false
 		};
-		if(quality > 0 && !mobile)
+		
+		// desktop + quality mid or high
+		if(quality > 2)
 		{
 			fxParams.textureCloud = this.lib.get("textures", "cloud");
 			fxParams.textureSpark = this.lib.get("textures", "spark");
