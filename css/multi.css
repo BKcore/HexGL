@@ -232,3 +232,33 @@ html, body {
   padding-top: 200px;
   z-index: 999999;
 }
+
+#credits {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  background: black;
+  overflow-y: auto;
+  text-align: center;
+  color: white;
+  font-size: 1.1em;
+  padding: 40px 20px;
+}
+
+#credits h3 {
+  font-size: 2em;
+  color: #666;
+}
+
+#credits b {
+  font-size: 1.2em;
+  color: #bbb;
+}
+
+#credits h4 {
+  color: #555;
+  font-size: 1.2em;
+}
