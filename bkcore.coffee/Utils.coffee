@@ -175,6 +175,14 @@ class Utils
   
     return req
 
+  ###
+    Checks whether the device supports Touch input
+  ###
+  @isTouchDevice: ()->
+
+    return ('ontouchstart' of window) or
+        (navigator.MaxTouchPoints > 0) or
+        (navigator.msMaxTouchPoints > 0)
 
 ###
   Exports
