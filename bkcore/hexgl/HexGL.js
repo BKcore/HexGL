@@ -112,6 +112,10 @@ bkcore.hexgl.HexGL.prototype.reset = function()
 {
 	this.manager.get('game').objects.lowFPS = 0;
 	this.gameplay.start();
+
+	bkcore.Audio.play('bg');
+	bkcore.Audio.volume('wind', 0.05);
+	bkcore.Audio.play('wind');
 }
 
 bkcore.hexgl.HexGL.prototype.restart = function()
@@ -166,6 +170,10 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 	});
 
 	this.gameplay.start();
+
+	bkcore.Audio.play('bg');
+	bkcore.Audio.play('wind');
+	bkcore.Audio.volume('wind',0.05);
 }
 
 bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
