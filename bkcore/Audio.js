@@ -101,8 +101,8 @@ bkcore.Audio.stop = function(id){
 
 	if(ctx){
 		if(bkcore.Audio.sounds[id].bufferNode !== null){
-			bkcore.Audio.sounds[id].bufferNode.disconnect();	
-			bkcore.Audio.sounds[id].bufferNode = null;
+			var bufferNode = bkcore.Audio.sounds[id].bufferNode;
+			bufferNode.stop ? bufferNode.stop(ctx.currentTime) : bufferNode.noteOff(ctx.currentTime);
 		}
 	}
 	else {
