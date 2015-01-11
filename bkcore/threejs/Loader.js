@@ -90,6 +90,9 @@ bkcore.threejs.Loader.prototype.load = function(data)
 	for(var i in data.images)
 		this.loadImage(i, data.images[i]);
 
+	for(var s in data.sounds)
+		this.loadSound(data.sounds[s].src, s, data.sounds[s].loop, data.sounds[s].usePanner);
+
 	this.progressCallback.call(this, this.progress);
 }
 
@@ -229,3 +232,29 @@ bkcore.threejs.Loader.prototype.loadImage = function(name, url)
 	e.src = url;
 	this.data.images[name] = e;
 }
+
+bkcore.threejs.Loader.prototype.loadSound = function(src, name, loop){
+    var self = this;
+    this.updateState("sounds", name, false);
+    
+    bkcore.Audio.addSound(
+    	src,
+    	name, 
+    	loop, 
+    	function(){
+       	 self.updateState("sounds", name, true);
+    	}
+    );
+    
+    this.data.sounds[name] = {
+        play: function(){
+            bkcore.Audio.play(name);
+        },
+        stop: function(){
+            bkcore.Audio.stop(name);
+        },
+        volume: function(vol){
+            bkcore.Audio.volume(name, vol);
+        }
+    };
+};
