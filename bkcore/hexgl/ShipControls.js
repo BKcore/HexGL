@@ -120,7 +120,8 @@ bkcore.hexgl.ShipControls = function(ctx)
 
 	this.touchController = null;
 	this.orientationController = null;
-	this.gamepadController = null
+	this.gamepadController = null;
+	this.bmwController = null
 
 	if(ctx.controlType == 1 && bkcore.controllers.TouchController.isCompatible())
 	{
@@ -140,7 +141,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 				}
 			});
 	}
-	else if(ctx.controlType == 4 && bkcore.controllers.OrientationController.isCompatible())
+	else if(ctx.controlType == 5 && bkcore.controllers.OrientationController.isCompatible())
 	{
 		this.orientationController = new bkcore.controllers.OrientationController(
 			domElement, true,
@@ -154,6 +155,15 @@ bkcore.hexgl.ShipControls = function(ctx)
 				else
 					self.key.forward = true;
 			});
+	}
+	else if(ctx.controlType == 4 && bkcore.controllers.BmwController.isCompatible())
+	{
+		this.bmwController = new bkcore.controllers.BmwController(
+	    	function(controller){
+		    	self.key.forward = controller.accelerationPedal > 0;
+		    	self.key.left = controller.steeringAngle < -0.1;
+		    	self.key.right = controller.steeringAngle > 0.1;
+	     	});
 	}
 	else if(ctx.controlType == 3 && bkcore.controllers.GamepadController.isCompatible())
 	{
@@ -399,6 +409,11 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 			angularAmount -= this.gamepadController.lstickx * this.angularSpeed * dt;
 			rollAmount += this.gamepadController.lstickx * this.rollAngle;
 		}
+		else if(this.bmwController != null && this.bmwController.updateAvailable())
+		{
+			angularAmount -= this.bmwController.steeringAngle * this.angularSpeed * dt;
+			this.speed += this.bmwController.accelerationPedal * this.thrust * dt;
+		}
 		else if(this.leapBridge != null && this.leapBridge.hasHands)
 		{
 			angularAmount += this.leapBridge.palmNormal[0] * 2 * this.angularSpeed * dt;
@@ -422,6 +437,7 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 			this.speed += this.thrust * dt;
 		else
 			this.speed -= this.airResist * dt;
+		
 		if(this.key.ltrigger)
 		{
 			if(this.key.left)

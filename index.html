@@ -53,7 +53,7 @@
           <div id="s-controlType">Controls: Keyboard</div>
           <div id="s-quality">Quality: High</div>
           <div id="s-hud">HUD: On</div>
-          <div id="s-godmode" style="display: none">Godmode: Off</div>
+          <div id="s-godmode">Godmode: Off</div>
           <div id="s-credits">Credits</div>
         </div>
       </div>
@@ -100,6 +100,7 @@
     <script src="bkcore.coffee/controllers/TouchController.js"></script>
     <script src="bkcore.coffee/controllers/OrientationController.js"></script>
     <script src="bkcore.coffee/controllers/GamepadController.js"></script>
+    <script src="bkcore.coffee/controllers/BmwController.js"></script>
 
     <script src="bkcore.coffee/Timer.js"></script>
     <script src="bkcore.coffee/ImageData.js"></script>
@@ -120,6 +121,14 @@
     <script src="bkcore/hexgl/tracks/Cityscape.js"></script>
 
     <script src="bkcore/hexgl/HexGL.js"></script>
+
+    <script type="text/javascript">
+    // test bmw controller
+    /*navigator.bmwConnector = {
+      accelerationPedal: 80,
+      steeringAngle: 0
+    }*/
+    </script>
 
     <script src="launch.js"></script>
 
