@@ -628,7 +628,6 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 
 	if(collision.r < 255)
 	{
-		if(this.boost > 0) bkcore.Audio.stop('boost');
 		bkcore.Audio.play('crash');
 
 		// Shield

@@ -87,23 +87,28 @@ bkcore.hexgl.tracks.Cityscape = {
 				sounds: {
 					bg: {
 						src: 'audio/bg.mp3',
-						loop: true
+						loop: true,
+						usePanner: false
 					},
 					crash: {
 						src: 'audio/crash.mp3',
-						loop: false
+						loop: false,
+						usePanner: true
 					},
 					destroyed: {
 						src: 'audio/destroyed.mp3',
-						loop: false
+						loop: false,
+						usePanner: false
 					},
 					boost: {
 						src: 'audio/boost.mp3',
-						loop: false
+						loop: false,
+						usePanner: true
 					},
 					wind: {
 						src: 'audio/wind.mp3',
-						loop: true
+						loop: true,
+						usePanner: true
 					}
 				}
 			});

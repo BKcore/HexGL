@@ -91,7 +91,7 @@ bkcore.threejs.Loader.prototype.load = function(data)
 		this.loadImage(i, data.images[i]);
 
 	for(var s in data.sounds)
-		this.loadSound(data.sounds[s].src, s, data.sounds[s].loop);
+		this.loadSound(data.sounds[s].src, s, data.sounds[s].loop, data.sounds[s].usePanner);
 
 	this.progressCallback.call(this, this.progress);
 }
