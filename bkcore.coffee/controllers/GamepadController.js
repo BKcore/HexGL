@@ -38,10 +38,20 @@
         return false;
       }
       gamepads = navigator.getGamepads ? navigator.getGamepads() : navigator.webkitGetGamepads();
-      if (!(gamepads != null ? gamepads[0] : void 0)) {
+      if (!gamepads) {
         return false;
       }
-      gp = gamepads[0];
+      gp = ((function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = gamepads.length; i < len; i++) {
+          pad = gamepads[i];
+          if ((pad != null ? pad.mapping : void 0) === 'standard') {
+            results.push(pad);
+          }
+        }
+        return results;
+      })())[0];
       if ((gp.buttons == null) || (gp.axes == null)) {
         return;
       }
