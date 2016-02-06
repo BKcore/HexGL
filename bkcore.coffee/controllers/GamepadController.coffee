@@ -25,7 +25,7 @@ class GamepadController
     gamepads = if navigator.getGamepads then navigator.getGamepads() else navigator.webkitGetGamepads()
     return false if not gamepads
     gp = (pad for pad in gamepads when pad?.mapping is 'standard')[0]
-    return if not gp.buttons? or not gp.axes?
+    return if not gp?.buttons? or not gp.axes?
     @lstickx = gp.axes[0]
     accel = gp.buttons[0]
     lt = gp.buttons[6]
