@@ -5,7 +5,7 @@
  *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
 bkcore.hexgl.ShipEffects = function(opts)
@@ -105,7 +105,7 @@ bkcore.hexgl.ShipEffects = function(opts)
 
 bkcore.hexgl.ShipEffects.prototype.update = function(dt)
 {
-	var boostRatio, opacity, scale, intensity, random;
+	let boostRatio, opacity, scale, intensity, random;
 
 	if(this.shipControls.destroyed)
 	{

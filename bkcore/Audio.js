@@ -1,4 +1,4 @@
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 
 bkcore.Audio = {};
 bkcore.Audio.sounds = {};
@@ -19,18 +19,18 @@ bkcore.Audio.init = function(){
 bkcore.Audio.init();
 
 bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
-	var ctx = bkcore.Audio._ctx;
+	const ctx = bkcore.Audio._ctx;
 	var audio = new Audio();
 	
 	if(ctx){
 		var audio = { src: null, gainNode: null, bufferNode: null, loop: loop };
-		var xhr = new XMLHttpRequest();
+		const xhr = new XMLHttpRequest();
 		xhr.responseType = 'arraybuffer';
 
 		xhr.onload = function(){
 			ctx.decodeAudioData(xhr.response, function(b){
 				// Create Gain Node
-				var gainNode = ctx.createGain();
+				const gainNode = ctx.createGain();
 
 				if(usePanner === true){
 					gainNode.connect(bkcore.Audio._panner);
@@ -72,10 +72,10 @@ bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
 };
 
 bkcore.Audio.play = function(id){
-	var ctx = bkcore.Audio._ctx;
+	const ctx = bkcore.Audio._ctx;
 
 	if(ctx){
-		var sound = ctx.createBufferSource();
+		const sound = ctx.createBufferSource();
 		sound.connect(bkcore.Audio.sounds[id].gainNode);
 		
 		sound.buffer = bkcore.Audio.sounds[id].src;
@@ -97,7 +97,7 @@ bkcore.Audio.play = function(id){
 };
 
 bkcore.Audio.stop = function(id){
-	var ctx = bkcore.Audio._ctx;
+	const ctx = bkcore.Audio._ctx;
 
 	if(ctx){
 		if(bkcore.Audio.sounds[id].bufferNode !== null){
@@ -112,7 +112,7 @@ bkcore.Audio.stop = function(id){
 };
 
 bkcore.Audio.volume = function(id, volume){
-	var ctx = bkcore.Audio._ctx;
+	const ctx = bkcore.Audio._ctx;
 
 	if(ctx){
 		bkcore.Audio.sounds[id].gainNode.gain.value = volume;
@@ -124,8 +124,8 @@ bkcore.Audio.volume = function(id, volume){
 
 bkcore.Audio.setListenerPos = function(vec){
 	if(bkcore.Audio._ctx){
-		var panner = bkcore.Audio._panner;
-		var vec2 = vec.normalize();
+		const panner = bkcore.Audio._panner;
+		const vec2 = vec.normalize();
 		panner.setPosition(
 			vec2.x * bkcore.Audio.posMultipler,
 			vec2.y * bkcore.Audio.posMultipler,
@@ -136,7 +136,7 @@ bkcore.Audio.setListenerPos = function(vec){
 
 bkcore.Audio.setListenerVelocity = function(vec){
 	if(bkcore.Audio._ctx){
-		var panner = bkcore.Audio._panner;
+		const panner = bkcore.Audio._panner;
 		panner.setVelocity(vec.x, vec.y, vec.z);
 	}
 };

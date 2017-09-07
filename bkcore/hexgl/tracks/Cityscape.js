@@ -5,7 +5,7 @@
  *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 bkcore.hexgl.tracks = bkcore.hexgl.tracks || {};
 
@@ -337,15 +337,15 @@ bkcore.hexgl.tracks.Cityscape = {
 		this.analyser = this.lib.get("analysers", "track.cityscape.collision");
 
 		// SKYBOX
-		var sceneCube = new THREE.Scene();
+		const sceneCube = new THREE.Scene();
 
-		var cameraCube = new THREE.PerspectiveCamera( 70, ctx.width / ctx.height, 1, 6000 );
+		const cameraCube = new THREE.PerspectiveCamera( 70, ctx.width / ctx.height, 1, 6000 );
 		sceneCube.add( cameraCube );
 
-		var skyshader = THREE.ShaderUtils.lib[ "cube" ];
+		const skyshader = THREE.ShaderUtils.lib[ "cube" ];
 		skyshader.uniforms[ "tCube" ].texture = this.lib.get("texturesCube", "skybox.dawnclouds");
 
-		var skymaterial = new THREE.ShaderMaterial(
+		const skymaterial = new THREE.ShaderMaterial(
 		{
 			fragmentShader: skyshader.fragmentShader,
 			vertexShader: skyshader.vertexShader,
@@ -353,24 +353,24 @@ bkcore.hexgl.tracks.Cityscape = {
 			depthWrite: false
 		});
 
-		var mesh = new THREE.Mesh( new THREE.CubeGeometry( 100, 100, 100 ), skymaterial );
+		const mesh = new THREE.Mesh( new THREE.CubeGeometry( 100, 100, 100 ), skymaterial );
 		mesh.flipSided = true;
 
 		sceneCube.add(mesh);
 
 		ctx.manager.add("sky", sceneCube, cameraCube);
 
-		var ambient = 0xbbbbbb, diffuse = 0xffffff, specular = 0xffffff, shininess = 42, scale = 23;
+		const ambient = 0xbbbbbb, diffuse = 0xffffff, specular = 0xffffff, shininess = 42, scale = 23;
 
 		// MAIN SCENE
-		var camera = new THREE.PerspectiveCamera( 70, ctx.width / ctx.height, 1, 60000 );
+		const camera = new THREE.PerspectiveCamera( 70, ctx.width / ctx.height, 1, 60000 );
 
-		var scene = new THREE.Scene();
+		const scene = new THREE.Scene();
 		scene.add( camera );
 		scene.add( new THREE.AmbientLight( ambient ) );
 
 		// SUN
-		var sun = new THREE.DirectionalLight( diffuse, 1.5, 30000 );
+		const sun = new THREE.DirectionalLight( diffuse, 1.5, 30000 );
 		sun.position.set( -4000, 1200, 1800 );
 		sun.lookAt(new THREE.Vector3());
 
@@ -393,12 +393,12 @@ bkcore.hexgl.tracks.Cityscape = {
 		scene.add( sun );
 
 		// SHIP
-		var ship = ctx.createMesh(scene, this.lib.get("geometries", "ship.feisar"), -1134*2, 10, -443*2, this.materials.ship);
+		const ship = ctx.createMesh(scene, this.lib.get("geometries", "ship.feisar"), -1134*2, 10, -443*2, this.materials.ship);
 
-		var booster = ctx.createMesh(ship, this.lib.get("geometries", "booster"), 0, 0.665, -3.8, this.materials.booster);
+		const booster = ctx.createMesh(ship, this.lib.get("geometries", "booster"), 0, 0.665, -3.8, this.materials.booster);
 		booster.depthWrite = false;
 
-		var boosterSprite = new THREE.Sprite({
+		const boosterSprite = new THREE.Sprite({
 			map: this.lib.get("textures", "booster.sprite"),
 			blending: THREE.AdditiveBlending,
 			useScreenCoordinates: false,
@@ -408,7 +408,7 @@ bkcore.hexgl.tracks.Cityscape = {
 		boosterSprite.mergeWith3D = false;
 		booster.add(boosterSprite);
 
-		var boosterLight = new THREE.PointLight(0x00a2ff, 4.0, 60);
+		const boosterLight = new THREE.PointLight(0x00a2ff, 4.0, 60);
 		boosterLight.position.set(0, 0.665, -4);
 		
 		// desktop + quality low, mid or high
@@ -422,7 +422,7 @@ bkcore.hexgl.tracks.Cityscape = {
 			ship.add(boosterLight);
 
 		// SHIP CONTROLS
-		var shipControls = new bkcore.hexgl.ShipControls(ctx);
+		const shipControls = new bkcore.hexgl.ShipControls(ctx);
 		shipControls.collisionMap = this.lib.get("analysers", "track.cityscape.collision");
 		shipControls.collisionPixelRatio = 2048.0 / 6000.0;
 		shipControls.collisionDetection = true;
@@ -435,7 +435,7 @@ bkcore.hexgl.tracks.Cityscape = {
 		ctx.tweakShipControls();
 
 		// SHIP EFFECTS AND PARTICLES
-		var fxParams = {
+		const fxParams = {
 			scene: scene,
 			shipControls: shipControls,
 			booster: booster,
@@ -454,14 +454,14 @@ bkcore.hexgl.tracks.Cityscape = {
 		ctx.components.shipEffects = new bkcore.hexgl.ShipEffects(fxParams);
 
 		// TRACK
-		var track = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape"), 0, -5, 0, this.materials.track);
-		var bonusBase = ctx.createMesh(scene, this.lib.get("geometries", "bonus.base"), 0, -5, 0, this.materials.bonusBase);
-		var bonusSpeed = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.bonus.speed"), 0, -5, 0, this.materials.bonusSpeed);
+		const track = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape"), 0, -5, 0, this.materials.track);
+		const bonusBase = ctx.createMesh(scene, this.lib.get("geometries", "bonus.base"), 0, -5, 0, this.materials.bonusBase);
+		const bonusSpeed = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.bonus.speed"), 0, -5, 0, this.materials.bonusSpeed);
 		bonusSpeed.receiveShadow = false;
-		var scrapers1 = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.scrapers1"), 0, 0, 0, this.materials.scrapers1);
-		var scrapers2 = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.scrapers2"), 0, 0, 0, this.materials.scrapers2);
-		var start = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.start"), 0, -5, 0, this.materials.start);
-		var startbanner = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.start.banner"), 0, -5, 0, this.materials.startBanner);
+		const scrapers1 = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.scrapers1"), 0, 0, 0, this.materials.scrapers1);
+		const scrapers2 = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.scrapers2"), 0, 0, 0, this.materials.scrapers2);
+		const start = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.start"), 0, -5, 0, this.materials.start);
+		const startbanner = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.start.banner"), 0, -5, 0, this.materials.startBanner);
 		startbanner.doubleSided = true;
 
 		// CAMERA
@@ -479,7 +479,7 @@ bkcore.hexgl.tracks.Cityscape = {
 		{
 			if(delta > 25 && this.objects.lowFPS < 1000) this.objects.lowFPS++;
 
-			var dt = delta/16.6;
+			const dt = delta/16.6;
 
 			this.objects.components.shipControls.update(dt);
 

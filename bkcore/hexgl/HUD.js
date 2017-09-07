@@ -5,12 +5,12 @@
  *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
 bkcore.hexgl.HUD = function(opts)
 {
-	var self = this;
+	const self = this;
 
 	this.visible = true;
 	this.messageOnly = false;
@@ -121,11 +121,11 @@ bkcore.hexgl.HUD.prototype.resetTime = function()
 
 bkcore.hexgl.HUD.prototype.update = function(speed, speedRatio, shield, shieldRatio)
 {
-	var SCREEN_WIDTH = this.width;
-	var SCREEN_HEIGHT = this.height;
+	const SCREEN_WIDTH = this.width;
+	const SCREEN_HEIGHT = this.height;
 
-	var SCREEN_HW = SCREEN_WIDTH / 2;
-	var SCREEN_HH = SCREEN_HEIGHT / 2;
+	const SCREEN_HW = SCREEN_WIDTH / 2;
+	const SCREEN_HH = SCREEN_HEIGHT / 2;
 
 	if(!this.visible)
 	{
@@ -133,22 +133,22 @@ bkcore.hexgl.HUD.prototype.update = function(speed, speedRatio, shield, shieldRa
 		return;
 	}
 
-	var w = this.bg.width;
-	var h = this.bg.height;
-	var r = h/w;
-	var nw = SCREEN_WIDTH;
-	var nh = nw*r;
-	var oh = SCREEN_HEIGHT - nh;
-	var o = 0;
+	const w = this.bg.width;
+	const h = this.bg.height;
+	const r = h/w;
+	const nw = SCREEN_WIDTH;
+	const nh = nw*r;
+	const oh = SCREEN_HEIGHT - nh;
+	const o = 0;
 	//speedbar
-	var ba = nh;
-	var bl = SCREEN_WIDTH/this.speedBarRatio;
-	var bw = bl * speedRatio;
+	const ba = nh;
+	const bl = SCREEN_WIDTH/this.speedBarRatio;
+	const bw = bl * speedRatio;
 	//shieldbar
-	var sw = SCREEN_WIDTH/this.shieldBarWRatio;
-	var sho = SCREEN_WIDTH/this.shieldBarHRatio;
-	var sh = sho*shieldRatio;
-	var sy = (SCREEN_WIDTH/this.shieldBarYRatio)+sho-sh;
+	const sw = SCREEN_WIDTH/this.shieldBarWRatio;
+	const sho = SCREEN_WIDTH/this.shieldBarHRatio;
+	const sh = sho*shieldRatio;
+	const sy = (SCREEN_WIDTH/this.shieldBarYRatio)+sho-sh;
 	
 
 	if(this.step == 0)
@@ -213,7 +213,7 @@ bkcore.hexgl.HUD.prototype.update = function(speed, speedRatio, shield, shieldRa
 		}
 
 	    // MESSAGE
-	    var my = SCREEN_HH-SCREEN_WIDTH/this.messageYRatio;
+	    const my = SCREEN_HH-SCREEN_WIDTH/this.messageYRatio;
 
 	    if(this.messageTiming > this.messageDuration+2000)
 		{

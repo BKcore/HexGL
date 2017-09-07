@@ -8,12 +8,12 @@
 'use strict';
 'v1.0.1';
 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
 bkcore.hexgl.HexGL = function(opts)
 {
-	var self = this;
+	const self = this;
 
 	this.document = opts.document || document;
 
@@ -94,7 +94,7 @@ bkcore.hexgl.HexGL.prototype.start = function()
 
 	this.manager.setCurrent("game");
 
-	var self = this;
+	const self = this;
 
 	function raf()
 	{
@@ -155,7 +155,7 @@ bkcore.hexgl.HexGL.prototype.load = function(opts)
 
 bkcore.hexgl.HexGL.prototype.initGameplay = function()
 {
-	var self = this;
+	const self = this;
 
 	this.gameplay = new bkcore.hexgl.Gameplay({
 		mode: this.mode,
@@ -182,8 +182,8 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 {
 	this.active = false;
 
-	var tf = bkcore.Timer.msToTimeString(f);
-	var tl = [
+	const tf = bkcore.Timer.msToTimeString(f);
+	const tl = [
 		bkcore.Timer.msToTimeString(l[0]),
 		bkcore.Timer.msToTimeString(l[1]),
 		bkcore.Timer.msToTimeString(l[2])
@@ -197,21 +197,21 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 		return;
 	}
 
-	var t = this.track;
-	var dc = this.document.getElementById("finish");
-	var ds = this.document.getElementById("finish-state");
-	var dh = this.document.getElementById("finish-hallmsg");
-	var dr = this.document.getElementById("finish-msg");
-	var dt = this.document.getElementById("finish-result");
-	var dl1 = this.document.getElementById("finish-lap1");
-	var dl2 = this.document.getElementById("finish-lap2");
-	var dl3 = this.document.getElementById("finish-lap3");
-	var dd = this.document.getElementById("finish-diff")
-	var st = this.document.getElementById("finish-twitter");
-	var sf = this.document.getElementById("finish-fb");
-	var sl = this.document.getElementById("lowfps-msg");
-	var d = this.difficulty == 0 ? 'casual' : 'hard';
-	var ts = this.hud.timeSeparators;
+	const t = this.track;
+	const dc = this.document.getElementById("finish");
+	const ds = this.document.getElementById("finish-state");
+	const dh = this.document.getElementById("finish-hallmsg");
+	const dr = this.document.getElementById("finish-msg");
+	const dt = this.document.getElementById("finish-result");
+	const dl1 = this.document.getElementById("finish-lap1");
+	const dl2 = this.document.getElementById("finish-lap2");
+	const dl3 = this.document.getElementById("finish-lap3");
+	const dd = this.document.getElementById("finish-diff");
+	const st = this.document.getElementById("finish-twitter");
+	const sf = this.document.getElementById("finish-fb");
+	const sl = this.document.getElementById("lowfps-msg");
+	const d = this.difficulty == 0 ? 'casual' : 'hard';
+	const ts = this.hud.timeSeparators;
 
 	if(this.gameplay.result == this.gameplay.results.FINISH)
 	{
@@ -233,7 +233,7 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 			}
 		}
 		// ladder record
-		var p = bkcore.hexgl.Ladder.global[t][d][bkcore.hexgl.Ladder.global[t][d].length-2];
+		const p = bkcore.hexgl.Ladder.global[t][d][bkcore.hexgl.Ladder.global[t][d].length-2];
 		if(p != undefined && p['score'] > f)
 		{
 			dh != undefined && (dh.innerHTML = "You made it to the HOF!");
@@ -282,7 +282,7 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 
 bkcore.hexgl.HexGL.prototype.initRenderer = function()
 {
-	var renderer = new THREE.WebGLRenderer({
+	const renderer = new THREE.WebGLRenderer({
 		antialias: false,
 		clearColor: 0x000000
 	});
@@ -324,22 +324,22 @@ bkcore.hexgl.HexGL.prototype.initHUD = function()
 
 bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 {
-	var renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
-	var renderTarget = new THREE.WebGLRenderTarget( this.width, this.height, renderTargetParameters );
+	const renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
+	const renderTarget = new THREE.WebGLRenderTarget( this.width, this.height, renderTargetParameters );
 
 	// GAME COMPOSER
-	var renderSky = new THREE.RenderPass( this.manager.get("sky").scene, this.manager.get("sky").camera );
+	const renderSky = new THREE.RenderPass( this.manager.get("sky").scene, this.manager.get("sky").camera );
 
-	var renderModel = new THREE.RenderPass( this.manager.get("game").scene, this.manager.get("game").camera );
+	const renderModel = new THREE.RenderPass( this.manager.get("game").scene, this.manager.get("game").camera );
 	renderModel.clear = false;
 
 	this.composers.game = new THREE.EffectComposer( this.renderer, renderTarget );
 
-	var effectScreen = new THREE.ShaderPass( THREE.ShaderExtras[ "screen" ] );
+	const effectScreen = new THREE.ShaderPass( THREE.ShaderExtras[ "screen" ] );
 	effectScreen.renderToScreen = true;
-	var effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] );
+	const effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] );
 
-	var effectHex = new THREE.ShaderPass( bkcore.threejs.Shaders[ "hexvignette" ] );
+	const effectHex = new THREE.ShaderPass( bkcore.threejs.Shaders[ "hexvignette" ] );
 	effectHex.uniforms[ 'size' ].value = 512.0 * (this.width/1633);
 	effectHex.uniforms[ 'rx' ].value = this.width;
 	effectHex.uniforms[ 'ry' ].value = this.height;
@@ -365,7 +365,7 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 	// desktop + quality mid or high
 	if(this.quality > 2)
 	{
-		var effectBloom = new THREE.BloomPass( 0.8, 25, 4 , 256);
+		const effectBloom = new THREE.BloomPass( 0.8, 25, 4 , 256);
 
 		this.composers.game.addPass( effectBloom );
 
@@ -385,7 +385,7 @@ bkcore.hexgl.HexGL.prototype.createMesh = function(parent, geometry, x, y, z, ma
 {
 	geometry.computeTangents();
 
-	var mesh = new THREE.Mesh( geometry, mat );
+	const mesh = new THREE.Mesh( geometry, mat );
 	mesh.position.set( x, y, z );
 	parent.add(mesh);
 
@@ -401,7 +401,7 @@ bkcore.hexgl.HexGL.prototype.createMesh = function(parent, geometry, x, y, z, ma
 
 bkcore.hexgl.HexGL.prototype.tweakShipControls = function()
 {
-	var c = this.components.shipControls;
+	const c = this.components.shipControls;
 	if(this.difficulty == 1)
 	{
 		c.airResist = 0.035;

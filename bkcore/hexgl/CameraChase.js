@@ -5,7 +5,7 @@
  *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
 bkcore.hexgl.CameraChase = function(opts)

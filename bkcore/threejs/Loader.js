@@ -10,7 +10,7 @@
 /*!
  * @package bkcore.threejs
  */
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.threejs = bkcore.threejs || {};
 
 bkcore.NONE = undefined;
@@ -21,7 +21,7 @@ bkcore.NONE = undefined;
  */
 bkcore.threejs.Loader = function(opts)
 {
-	var self = this;
+	const self = this;
 
 	this.jsonLoader = new THREE.JSONLoader();
 
@@ -41,7 +41,7 @@ bkcore.threejs.Loader = function(opts)
 	this.states = {};
 	this.data = {};
 
-	for(var t in this.types)
+	for(const t in this.types)
 	{
 		this.data[t] = {};
 		this.states[t] = {};
@@ -61,36 +61,36 @@ bkcore.threejs.Loader = function(opts)
  */
 bkcore.threejs.Loader.prototype.load = function(data)
 {
-	var self = this;
+	const self = this;
 
-	for(var k in this.types)
+	for(const k in this.types)
 	{
 		if(k in data)
 		{
-			var size = 0;
-			for(var j in data[k])
+			let size = 0;
+			for(const j in data[k])
 				size++;
 			this.progress.total += size;
 			this.progress.remaining += size;
 		}
 	}
 
-	for(var t in data.textures)
+	for(const t in data.textures)
 		this.loadTexture(t, data.textures[t]);
 
-	for(var c in data.texturesCube)
+	for(const c in data.texturesCube)
 		this.loadTextureCube(c, data.texturesCube[c]);
 
-	for(var g in data.geometries)
+	for(const g in data.geometries)
 		this.loadGeometry(g, data.geometries[g]);
 
-	for(var a in data.analysers)
+	for(const a in data.analysers)
 		this.loadAnalyser(a, data.analysers[a]);
 
-	for(var i in data.images)
+	for(const i in data.images)
 		this.loadImage(i, data.images[i]);
 
-	for(var s in data.sounds)
+	for(const s in data.sounds)
 		this.loadSound(data.sounds[s].src, s, data.sounds[s].loop, data.sounds[s].usePanner);
 
 	this.progressCallback.call(this, this.progress);
@@ -160,7 +160,7 @@ bkcore.threejs.Loader.prototype.loaded = function(type, name)
 
 bkcore.threejs.Loader.prototype.loadTexture = function(name, url)
 {
-	var self = this;
+	const self = this;
 	this.updateState("textures", name, false);
 	this.data.textures[name] = THREE.ImageUtils.loadTexture(
 		url, 
@@ -176,9 +176,9 @@ bkcore.threejs.Loader.prototype.loadTexture = function(name, url)
 
 bkcore.threejs.Loader.prototype.loadTextureCube = function(name, url)
 {
-	var self = this;
+	const self = this;
 
-	var urls = [
+	const urls = [
 		url.replace("%1", "px"), url.replace("%1", "nx"),
 		url.replace("%1", "py"), url.replace("%1", "ny"),
 		url.replace("%1", "pz"), url.replace("%1", "nz")
@@ -196,7 +196,7 @@ bkcore.threejs.Loader.prototype.loadTextureCube = function(name, url)
 
 bkcore.threejs.Loader.prototype.loadGeometry = function(name, url)
 {
-	var self = this;
+	const self = this;
 	this.data.geometries[name] = null;
 	this.updateState("geometries", name, false);
 	this.jsonLoader.load(
@@ -210,7 +210,7 @@ bkcore.threejs.Loader.prototype.loadGeometry = function(name, url)
 
 bkcore.threejs.Loader.prototype.loadAnalyser = function(name, url)
 {
-	var self = this;
+	const self = this;
 	this.updateState("analysers", name, false);
 	this.data.analysers[name] = new bkcore.ImageData(
 		url, 
@@ -222,9 +222,9 @@ bkcore.threejs.Loader.prototype.loadAnalyser = function(name, url)
 
 bkcore.threejs.Loader.prototype.loadImage = function(name, url)
 {
-	var self = this;
+	const self = this;
 	this.updateState("images", name, false);
-	var e = new Image();
+	const e = new Image();
 	e.onload = function() { 
 		self.updateState("images", name, true) ;
 	};
@@ -234,7 +234,7 @@ bkcore.threejs.Loader.prototype.loadImage = function(name, url)
 }
 
 bkcore.threejs.Loader.prototype.loadSound = function(src, name, loop){
-    var self = this;
+    const self = this;
     this.updateState("sounds", name, false);
     
     bkcore.Audio.addSound(

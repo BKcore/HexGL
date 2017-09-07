@@ -5,13 +5,13 @@
  *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
 bkcore.hexgl.ShipControls = function(ctx)
 {
-	var self = this;
-	var domElement = ctx.document;
+	const self = this;
+	const domElement = ctx.document;
 
 	this.active = true;
 	this.destroyed = false;
@@ -174,9 +174,9 @@ bkcore.hexgl.ShipControls = function(ctx)
 		if(Leap == null)
 			throw new Error("Unable to reach LeapJS!");
 
-		var leapInfo = this.leapInfo = document.getElementById('leapinfo');
+		const leapInfo = this.leapInfo = document.getElementById('leapinfo');
 		isServerConnected = false;
-		var lb = this.leapBridge = {
+		const lb = this.leapBridge = {
 			isConnected: true,
 			hasHands: false,
 			palmNormal: [0, 0, 0]
@@ -206,7 +206,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 		}
 		updateInfo();
 
-		var lc = this.leapController =  new Leap.Controller({enableGestures: false});
+		const lc = this.leapController =  new Leap.Controller({enableGestures: false});
 		lc.on('connect', function()
 		{
 			isServerConnected = true;
@@ -375,9 +375,9 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 	this.drift += (0.0 - this.drift) * this.driftLerp;
 	this.angular += (0.0 - this.angular) * this.angularLerp * 0.5;
 
-	var rollAmount = 0.0;
-	var angularAmount = 0.0;
-	var yawLeap = 0.0;
+	let rollAmount = 0.0;
+	let angularAmount = 0.0;
+	let yawLeap = 0.0;
 
 	if(this.leapBridge != null && this.leapBridge.hasHands)
 	{
@@ -507,7 +507,7 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 		this.mesh.matrix.identity();
 
 		// Gradient (Mesh only, no dummy physics impact)
-		var gradientDelta = (this.gradientTarget - (yawLeap + this.gradient)) * this.gradientLerp;
+		const gradientDelta = (this.gradientTarget - (yawLeap + this.gradient)) * this.gradientLerp;
 		if(Math.abs(gradientDelta) > this.epsilon) this.gradient += gradientDelta;
 		if(Math.abs(this.gradient) > this.epsilon)
 		{
@@ -516,7 +516,7 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 		}
 
 		// Tilting (Idem)
-		var tiltDelta = (this.tiltTarget - this.tilt) * this.tiltLerp;
+		const tiltDelta = (this.tiltTarget - this.tilt) * this.tiltLerp;
 		if(Math.abs(tiltDelta) > this.epsilon) this.tilt += tiltDelta;
 		if(Math.abs(this.tilt) > this.epsilon)
 		{
@@ -525,7 +525,7 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 		}
 
 		// Rolling (Idem)
-		var rollDelta = (rollAmount - this.roll) * this.rollLerp;
+		const rollDelta = (rollAmount - this.roll) * this.rollLerp;
 		if(Math.abs(rollDelta) > this.epsilon) this.roll += rollDelta;
 		if(Math.abs(this.roll) > this.epsilon)
 		{
@@ -559,7 +559,7 @@ bkcore.hexgl.ShipControls.prototype.teleport = function(pos, quat)
 		this.mesh.matrix.identity();
 
 		// Gradient (Mesh only, no dummy physics impact)
-		var gradientDelta = (this.gradientTarget - this.gradient) * this.gradientLerp;
+		const gradientDelta = (this.gradientTarget - this.gradient) * this.gradientLerp;
 		if(Math.abs(gradientDelta) > this.epsilon) this.gradient += gradientDelta;
 		if(Math.abs(this.gradient) > this.epsilon)
 		{
@@ -568,7 +568,7 @@ bkcore.hexgl.ShipControls.prototype.teleport = function(pos, quat)
 		}
 
 		// Tilting (Idem)
-		var tiltDelta = (this.tiltTarget - this.tilt) * this.tiltLerp;
+		const tiltDelta = (this.tiltTarget - this.tilt) * this.tiltLerp;
 		if(Math.abs(tiltDelta) > this.epsilon) this.tilt += tiltDelta;
 		if(Math.abs(this.tilt) > this.epsilon)
 		{
@@ -592,11 +592,11 @@ bkcore.hexgl.ShipControls.prototype.boosterCheck = function(dt)
 		bkcore.Audio.stop('boost');
 	}
 
-	var x = Math.round(this.collisionMap.pixels.width/2 + this.dummy.position.x * this.collisionPixelRatio);
-	var z = Math.round(this.collisionMap.pixels.height/2 + this.dummy.position.z * this.collisionPixelRatio);
-	var pos = new THREE.Vector3(x, 0, z);
+	const x = Math.round(this.collisionMap.pixels.width/2 + this.dummy.position.x * this.collisionPixelRatio);
+	const z = Math.round(this.collisionMap.pixels.height/2 + this.dummy.position.z * this.collisionPixelRatio);
+	const pos = new THREE.Vector3(x, 0, z);
 
-	var color = this.collisionMap.getPixel(x, z);
+	const color = this.collisionMap.getPixel(x, z);
 
 	if(color.r == 255 && color.g < 127 && color.b < 127) {
 		bkcore.Audio.play('boost');
@@ -618,9 +618,9 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 	this.collision.right = false;
 	this.collision.front = false;
 
-	var x = Math.round(this.collisionMap.pixels.width/2 + this.dummy.position.x * this.collisionPixelRatio);
-	var z = Math.round(this.collisionMap.pixels.height/2 + this.dummy.position.z * this.collisionPixelRatio);
-	var pos = new THREE.Vector3(x, 0, z);
+	const x = Math.round(this.collisionMap.pixels.width/2 + this.dummy.position.x * this.collisionPixelRatio);
+	const z = Math.round(this.collisionMap.pixels.height/2 + this.dummy.position.z * this.collisionPixelRatio);
+	const pos = new THREE.Vector3(x, 0, z);
 
 	//console.log({c: this.collisionMap.getPixel(414, 670), d: this.dummy.position, x: x, y: y, p: this.collisionMap.getPixel(x, y)})
 
@@ -631,7 +631,7 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 		bkcore.Audio.play('crash');
 
 		// Shield
-		var sr = (this.getRealSpeed() / this.maxSpeed);
+		const sr = (this.getRealSpeed() / this.maxSpeed);
 		this.shield -= sr * sr * 0.8 * this.shieldDamage;
 
 		// Repulsion
@@ -642,10 +642,10 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 		this.repulsionVLeft.multiplyScalar(this.repulsionVScale);
 		this.repulsionVRight.multiplyScalar(this.repulsionVScale);
 
-		var lPos = this.repulsionVLeft.addSelf(pos);
-		var rPos = this.repulsionVRight.addSelf(pos);
-		var lCol = this.collisionMap.getPixel(Math.round(lPos.x), Math.round(lPos.z)).r;
-		var rCol = this.collisionMap.getPixel(Math.round(rPos.x), Math.round(rPos.z)).r;
+		const lPos = this.repulsionVLeft.addSelf(pos);
+		const rPos = this.repulsionVRight.addSelf(pos);
+		const lCol = this.collisionMap.getPixel(Math.round(lPos.x), Math.round(lPos.z)).r;
+		const rCol = this.collisionMap.getPixel(Math.round(rPos.x), Math.round(rPos.z)).r;
 
 		this.repulsionAmount = Math.max(0.8,
 			Math.min(this.repulsionCap,
@@ -674,7 +674,7 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 		// DIRTY GAMEOVER
 		if(rCol < 128 && lCol < 128)
 		{
-			var fCol = this.collisionMap.getPixel(Math.round(pos.x+2), Math.round(pos.z+2)).r;
+			const fCol = this.collisionMap.getPixel(Math.round(pos.x+2), Math.round(pos.z+2)).r;
 			if(fCol < 128)
 			{
 				console.log('GAMEOVER');
@@ -699,15 +699,15 @@ bkcore.hexgl.ShipControls.prototype.heightCheck = function(dt)
 	if(!this.heightMap || !this.heightMap.loaded)
 		return false;
 
-	var x = this.heightMap.pixels.width/2 + this.dummy.position.x * this.heightPixelRatio;
-	var z = this.heightMap.pixels.height/2 + this.dummy.position.z * this.heightPixelRatio;
+	let x = this.heightMap.pixels.width/2 + this.dummy.position.x * this.heightPixelRatio;
+	let z = this.heightMap.pixels.height/2 + this.dummy.position.z * this.heightPixelRatio;
 	var height = this.heightMap.getPixelFBilinear(x, z) / this.heightScale + this.heightBias;
 
-	var color = this.heightMap.getPixel(x, z);
+	const color = this.heightMap.getPixel(x, z);
 
 	if(height < 16777)
 	{
-		var delta = (height - this.dummy.position.y);
+		const delta = (height - this.dummy.position.y);
 
 		if(delta > 0)
 		{
@@ -727,7 +727,7 @@ bkcore.hexgl.ShipControls.prototype.heightCheck = function(dt)
 	x = this.heightMap.pixels.width/2 + this.gradientVector.x * this.heightPixelRatio;
 	z = this.heightMap.pixels.height/2 + this.gradientVector.z * this.heightPixelRatio;
 
-	var nheight = this.heightMap.getPixelFBilinear(x, z) / this.heightScale + this.heightBias;
+	let nheight = this.heightMap.getPixelFBilinear(x, z) / this.heightScale + this.heightBias;
 
 	if(nheight < 16777)
 		this.gradientTarget = -Math.atan2(nheight-height, 5.0)*this.gradientScale;

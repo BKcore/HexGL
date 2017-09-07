@@ -9,7 +9,7 @@
 /*!
  * @package bkcore.threejs
  */ 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.threejs = bkcore.threejs || {};
 
 /**
@@ -67,9 +67,9 @@ bkcore.threejs.Particles.prototype.build = function()
 	this.pool = [];
 	this.buffer = [];
 
-	for(var i = 0; i < this.max; ++i)
+	for(let i = 0; i < this.max; ++i)
 	{
-		var p = new bkcore.threejs.Particle();
+		const p = new bkcore.threejs.Particle();
 		this.pool.push(p);
 		this.buffer.push(p);
 		this.geometry.vertices.push(p.position);
@@ -88,10 +88,10 @@ bkcore.threejs.Particles.prototype.build = function()
  */
 bkcore.threejs.Particles.prototype.emit = function(count)
 {
-	var emitable = Math.min(count, this.pool.length);
-	for(var i = 0; i < emitable; ++i)
+	const emitable = Math.min(count, this.pool.length);
+	for(let i = 0; i < emitable; ++i)
 	{
-		var p = this.pool.pop();
+		const p = this.pool.pop();
 		p.available = false;
 		p.position.copy(this.spawn)
 			.addSelf(
@@ -125,10 +125,10 @@ bkcore.threejs.Particles.prototype.randomVector = function()
  */
 bkcore.threejs.Particles.prototype.update = function(dt)
 {
-	var p, l;
-	var df = new THREE.Vector3();
-	var dv = new THREE.Vector3();
-	for(var i = 0; i < this.buffer.length; ++i)
+	let p, l;
+	const df = new THREE.Vector3();
+	const dv = new THREE.Vector3();
+	for(let i = 0; i < this.buffer.length; ++i)
 	{
 
 		p = this.buffer[i];
