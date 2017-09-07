@@ -3,7 +3,7 @@
  * @author alteredq / http://alteredqualia.com/
  * @author mr.doob / http://mrdoob.com/
  */
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.threejs = bkcore.threejs || {};
 
 bkcore.threejs.Shaders = 

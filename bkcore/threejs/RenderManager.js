@@ -40,13 +40,13 @@
  *		});
  */
 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.threejs = bkcore.threejs || {};
 
 (function(w){
-	var perfNow;
-	var perfNowNames = ['now', 'webkitNow', 'msNow', 'mozNow'];
-	if(!!w['performance']) for(var i = 0; i < perfNowNames.length; ++i)
+	let perfNow;
+	const perfNowNames = ['now', 'webkitNow', 'msNow', 'mozNow'];
+	if(!!w['performance']) for(let i = 0; i < perfNowNames.length; ++i)
 	{
 		var n = perfNowNames[i];
 		if(!!w['performance'][n])
@@ -113,8 +113,8 @@ bkcore.threejs.RenderManager.prototype.renderCurrent = function()
 {
 	if(this.current && this.current.render)
 	{
-		var now = window.perfNow();
-		var delta = now - this.time;
+		const now = window.perfNow();
+		const delta = now - this.time;
 		this.time = now;
 
 		this.current.render.call(this.current, delta, this.renderer);

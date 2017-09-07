@@ -5,12 +5,12 @@
  *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
 bkcore.hexgl.Gameplay = function(opts)
 {
-	var self = this;
+	const self = this;
 
 	this.startDelay = opts.hud == null ? 0 : 1000;
 	this.countDownDelay = opts.hud == null ? 1000 : 1500;
@@ -58,12 +58,12 @@ bkcore.hexgl.Gameplay = function(opts)
 		self.raceData.tick(this.timer.time.elapsed);
 
 		self.hud != null && self.hud.updateTime(self.timer.getElapsedTime());
-		var cp = self.checkPoint();
+		const cp = self.checkPoint();
 
 		if(cp == self.track.checkpoints.start && self.previousCheckPoint == self.track.checkpoints.last)
 		{
 			self.previousCheckPoint = cp;
-			var t = self.timer.time.elapsed;
+			const t = self.timer.time.elapsed;
 			self.lapTimes.push(t - self.lapTimeElapsed);
 			self.lapTimeElapsed = t;
 
@@ -131,7 +131,7 @@ bkcore.hexgl.Gameplay.prototype.start = function(opts)
 		if(this.hud != null) this.hud.messageOnly = true;
 
 		try {
-			var d = localStorage['race-'+this.track.name+'-replay'];
+			const d = localStorage['race-'+this.track.name+'-replay'];
 			if(d == undefined)
 			{
 				console.error('No replay data for '+'race-'+this.track.name+'-replay'+'.');
@@ -219,10 +219,10 @@ bkcore.hexgl.Gameplay.prototype.update = function()
 
 bkcore.hexgl.Gameplay.prototype.checkPoint = function()
 {
-	var x = Math.round(this.analyser.pixels.width/2 + this.shipControls.dummy.position.x * this.pixelRatio);
-	var z = Math.round(this.analyser.pixels.height/2 + this.shipControls.dummy.position.z * this.pixelRatio);
+	const x = Math.round(this.analyser.pixels.width/2 + this.shipControls.dummy.position.x * this.pixelRatio);
+	const z = Math.round(this.analyser.pixels.height/2 + this.shipControls.dummy.position.z * this.pixelRatio);
 
-	var color = this.analyser.getPixel(x, z);
+	const color = this.analyser.getPixel(x, z);
 
 	if(color.r == 255 && color.g == 255 && color.b < 250)
 		return color.b;

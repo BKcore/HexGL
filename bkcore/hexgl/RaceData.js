@@ -5,7 +5,7 @@
  *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
 bkcore.hexgl.RaceData = function(track, mode, shipControls)
@@ -33,8 +33,8 @@ bkcore.hexgl.RaceData.prototype.tick = function(time)
 {
 	if(this.rateState == 1)
 	{
-		var p = this.shipControls.getPosition();
-		var q = this.shipControls.getQuaternion();
+		const p = this.shipControls.getPosition();
+		const q = this.shipControls.getQuaternion();
 		this.data.push([
 			time,
 			p.x, p.y, p.z,
@@ -55,7 +55,7 @@ bkcore.hexgl.RaceData.prototype.applyInterpolated = function(time)
 	while(this.seek < this.last && this.data[this.seek+1][0] < time)
 		++this.seek;
 
-	var prev = this.data[this.seek];
+	const prev = this.data[this.seek];
 	this._pp.set(prev[1], prev[2], prev[3]);
 	this._pq.set(prev[4], prev[5], prev[6], prev[7]);
 
@@ -70,11 +70,11 @@ bkcore.hexgl.RaceData.prototype.applyInterpolated = function(time)
 		this.shipControls.teleport(this._pp, this._pq);
 
 	// interpolation
-	var next = this.data[this.seek+1];
+	const next = this.data[this.seek+1];
 	this._np.set(next[1], next[2], next[3]);
 	this._nq.set(next[4], next[5], next[6], next[7]);
 
-	var t = (time-prev[0]) / (next[0]-prev[0]);
+	const t = (time-prev[0]) / (next[0]-prev[0]);
 	this._p.copy(this._pp).lerpSelf(this._np, t);
 	this._q.copy(this._pq).slerpSelf(this._nq, t);
 	

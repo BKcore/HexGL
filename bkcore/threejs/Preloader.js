@@ -9,7 +9,7 @@
 /*!
  * @package bkcore.threejs
  */
-var bkcore = bkcore || {};
+const bkcore = bkcore || {};
 bkcore.threejs = bkcore.threejs || {};
 
 /**
@@ -81,7 +81,7 @@ bkcore.threejs.Preloader = function(opts)
 		} ) );
 	this.stage.add(this.outercube);
 
-	var self = this;
+	const self = this;
 
 	function raf()
 	{
@@ -111,7 +111,7 @@ bkcore.threejs.Preloader.prototype.render = function()
 
 	this.ctx.clearRect(0 , 0 , this.width , this.height);
 
-	var s = (this.ratio - this.cube.scale.x) * 0.3;
+	const s = (this.ratio - this.cube.scale.x) * 0.3;
 
 	this.cube.scale.addScalar(s);
 	this.cube.rotation.y = this.time;
@@ -130,7 +130,7 @@ bkcore.threejs.Preloader.prototype.render = function()
 
 bkcore.threejs.Preloader.prototype.mouseMove = function(event) 
 {
-	var h2 = this.height/2;
+	const h2 = this.height/2;
 	this.y = -(event.clientY - h2)/h2+0.3;
 }
 
