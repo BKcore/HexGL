@@ -21,7 +21,7 @@ bkcore.Audio.init();
 bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
 	var ctx = bkcore.Audio._ctx;
 	var audio = new Audio();
-	
+
 	if(ctx){
 		var audio = { src: null, gainNode: null, bufferNode: null, loop: loop };
 		var xhr = new XMLHttpRequest();
@@ -44,7 +44,7 @@ bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
 
 				//Remember the gain node
 				audio.gainNode = gainNode;
-				
+
 				callback();
 			}, function(e){
 				console.error('Audio decode failed!', e);
@@ -67,7 +67,7 @@ bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
 		audio.loop = loop;
 		audio.src = src;
 	}
-	
+
 	bkcore.Audio.sounds[id] = audio;
 };
 
@@ -77,7 +77,7 @@ bkcore.Audio.play = function(id){
 	if(ctx){
 		var sound = ctx.createBufferSource();
 		sound.connect(bkcore.Audio.sounds[id].gainNode);
-		
+
 		sound.buffer = bkcore.Audio.sounds[id].src;
 		sound.loop = bkcore.Audio.sounds[id].loop;
 
@@ -137,6 +137,6 @@ bkcore.Audio.setListenerPos = function(vec){
 bkcore.Audio.setListenerVelocity = function(vec){
 	if(bkcore.Audio._ctx){
 		var panner = bkcore.Audio._panner;
-		panner.setVelocity(vec.x, vec.y, vec.z);
+		// panner.setVelocity(vec.x, vec.y, vec.z);
 	}
 };
