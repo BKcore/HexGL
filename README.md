@@ -10,6 +10,7 @@ Source code of [HexGL](http://hexgl.bkcore.com), the futuristic HTML5 racing gam
 ![Screenshot of Game](screenshot.jpeg)
 ![Start Screen](startScreen.jpeg)
 ![Get Ready](getReady.jpeg)
+![Go](go.jpeg)
 
 ## License
 
