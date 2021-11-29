@@ -7,7 +7,9 @@ Source code of [HexGL](http://hexgl.bkcore.com), the futuristic HTML5 racing gam
   * **[Master](https://github.com/BKcore/HexGL)** - Public release (stable).
 
 ## Screenshots
-![Drag Racing](download(11).jpeg)
+![Screenshot of Game](screenshot.jpeg)
+![Start Screen](startScreen.jpeg)
+![Get Ready](getReady.jpeg)
 
 ## License
 
