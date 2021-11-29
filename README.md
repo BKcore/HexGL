@@ -8,20 +8,16 @@ Source code of [HexGL](http://hexgl.bkcore.com), the futuristic HTML5 racing gam
 
 ## Screenshots
 
-<img src="screenshot.jpeg"
+<img src="unnamed.jpg"
      alt="Screenshot of Game"
      style="float: left; margin-right: 10px; width:175%; height: 175%;" />
      
-<img src="startScreen.jpeg"
+<img src="start.jpeg"
      alt="Start Screen"
      style="float: left; margin-right: 10px; width: 175%; height: 175%;" />
      
-<img src="getReady.jpeg"
-     alt="Get Ready"
-     style="float: left; margin-right: 10px; width: 175%; height: 175%;" />
-     
-<img src="go.jpeg"
-     alt="Go"
+<img src="ship.jpg"
+     alt="Your Ship"
      style="float: left; margin-right: 10px; width: 175%; height: 175%;" />     
 
 ## License
