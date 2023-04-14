@@ -1,4 +1,4 @@
-const _VERSION = "1.0.2",
+const _VERSION = "1.0.0",
     _SITE = "https://hexgl.bkcore.com",
     _DEBUG = true,
     _ASSETS_ = [
@@ -169,9 +169,7 @@ const netFetchResponseHandler = async (path, event, FetchRes) => {
 
 const cacheFetchResponseHandler = async (path, event, CacheRes) => {
     if (CacheRes && CacheRes.status < 300) {
-        console.log("yeas")
         if (isRecache(path)) {
-            console.log("yea2s")
             await caches.delete(_STAT_CACHE_NAME);
             await caches.delete(_DYN_CACHE_NAME);
         }
