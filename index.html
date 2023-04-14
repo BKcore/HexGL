@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="css/multi.css" type="text/css" charset="utf-8">
     <link rel="stylesheet" href="css/fonts.css" type="text/css" charset="utf-8">
+    <script rel="stylesheet" href="css/fonts.css" type="text/css" charset="utf-8"></script>
     <style>
       body {
         padding:0;
@@ -84,7 +85,45 @@
     </div>
 
     <div id="leapinfo" style="display: none"></div>
-
+    <script type="text/javascript">      
+		const serviceWorkerRegistration = () => {
+				if (navigator.serviceWorker) {
+						let refreshing = false;
+						navigator.serviceWorker.addEventListener("controllerchange", () => {
+								if (refreshing) return;
+								window.location.reload();
+								refreshing = true;
+						});
+						navigator.serviceWorker
+								.register("/sw.js")
+								.then((reg) => {
+										if (reg.waiting) {
+											const newServiceWorker = reg.waiting;
+											newServiceWorker.postMessage({ action: "skipWaiting" });
+										}
+										reg.addEventListener("updatefound", () => {
+												const newServiceWorker = reg.installing;
+												newServiceWorker.addEventListener("statechange", () => {
+														switch (newServiceWorker.state) {
+																case "installed":
+																		if (navigator.serviceWorker.controller) {
+																			newServiceWorker.postMessage({ action: "skipWaiting" });
+																		}
+																		break;
+														}
+												});
+										});
+								})
+								.catch((err) => {
+										console.error("Service worker registration error");
+										console.error("SW:", err);
+								});
+				} else {
+						console.warn("Browser does not support service worker.")
+				}
+		};
+		serviceWorkerRegistration();
+    </script>
     <script src="libs/leap-0.4.1.min.js"></script>
     <script src="libs/Three.dev.js"></script>
     <script src="libs/ShaderExtras.js"></script>
@@ -100,30 +139,22 @@
     <script src="bkcore.coffee/controllers/TouchController.js"></script>
     <script src="bkcore.coffee/controllers/OrientationController.js"></script>
     <script src="bkcore.coffee/controllers/GamepadController.js"></script>
-
     <script src="bkcore.coffee/Timer.js"></script>
     <script src="bkcore.coffee/ImageData.js"></script>
     <script src="bkcore.coffee/Utils.js"></script>
-
     <script src="bkcore/threejs/RenderManager.js"></script>
     <script src="bkcore/threejs/Shaders.js"></script>
     <script src="bkcore/threejs/Particles.js"></script>
     <script src="bkcore/threejs/Loader.js"></script>
-
     <script src="bkcore/Audio.js"></script>
-
     <script src="bkcore/hexgl/HUD.js"></script>
     <script src="bkcore/hexgl/RaceData.js"></script>
     <script src="bkcore/hexgl/ShipControls.js"></script>
     <script src="bkcore/hexgl/ShipEffects.js"></script>
     <script src="bkcore/hexgl/CameraChase.js"></script>
     <script src="bkcore/hexgl/Gameplay.js"></script>
-
     <script src="bkcore/hexgl/tracks/Cityscape.js"></script>
-
     <script src="bkcore/hexgl/HexGL.js"></script>
-
     <script src="launch.js"></script>
-
   </body>
 </html>
